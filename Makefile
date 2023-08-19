@@ -25,20 +25,20 @@ endif
 
 #=================== GENERAL VARIABLES ===================#
 
-INCLUDE					:=	$(addprefix -I,$(INC_DIR))
+INCLUDE	:=	$(addprefix -I,$(INC_DIR))
 
-MAIN					:=	src/main.c
+MAIN	:=	src/main.c
 
-SRC						:=	
+SRC		:=	
 
 
-ODIR					:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))
-SRC     				:=	$(SRC:%=$(SRC_DIR)/%)
+ODIR	:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))
+SRC     :=	$(SRC:%=$(SRC_DIR)/%)
 
-MAIN_OBJ				:=	$(MAIN:src/%.c=$(OBJ_DIR)/%.o)
-OBJS					:=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+MAIN_OBJ:=	$(MAIN:src/%.c=$(OBJ_DIR)/%.o)
+OBJS	:=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-LIBFT					:=	$(LIBFT_DIR)/libft.a
+LIBFT	:=	$(LIBFT_DIR)/libft.a
 
 #===============================================#
 #=================== RECIPES ===================#
@@ -94,7 +94,7 @@ $(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $^ -o $(NAME)
 
 $(LIBFT):
-	git submodule update --init --recursive
+	@git submodule update --init --recursive
 	@$(MAKE) -C $(LIBFT_DIR)
 
 $(ODIR):
