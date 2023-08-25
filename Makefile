@@ -5,11 +5,10 @@ NAME		:= philo
 OBJ_DIR		:=	./obj
 SRC_DIR		:=	./src
 INC_DIR		:=  ./include
-LIBFT_DIR	:=	./libs/libft_ext
 
 #=================== LIBRARIES ===================#
 
-CFLAGS		:=	-Wextra -Wall -Werror
+CFLAGS		:=	-Wextra -Wall -Werror -lpthread -lc
 
 ifdef OPTIM
 	CFLAG += -Ofast -flto -march=native
@@ -38,7 +37,6 @@ SRC     :=	$(SRC:%=$(SRC_DIR)/%)
 MAIN_OBJ:=	$(MAIN:src/%.c=$(OBJ_DIR)/%.o)
 OBJS	:=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-LIBFT	:=	$(LIBFT_DIR)/libft.a
 
 #===============================================#
 #=================== RECIPES ===================#
@@ -50,16 +48,23 @@ LIBFT	:=	$(LIBFT_DIR)/libft.a
 .PHONY: all
 all: $(ODIR) $(NAME)
 
+.PHONY: optim
+optim:
+	@$(MAKE) OPTIM=1
+
+.PHONY: reoptim
+reoptim:
+	$(MAKE) fclean
+	$(MAKE) optim
+
 .PHONY: clean
 clean:
 	@rm -rf $(OBJ_DIR)
-	@$(MAKE) clean -C $(LIBFT_DIR) clean
 
 .PHONY: fclean
 fclean:
 	@$(MAKE) clean
 	@rm -rf $(NAME)
-	@$(MAKE) fclean -C $(LIBFT_DIR)
 
 .PHONY: re
 re:
@@ -90,12 +95,8 @@ $(MAIN_OBJ): $(MAIN)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-$(NAME): $(OBJS) $(MAIN_OBJ) $(LIBFT)
+$(NAME): $(OBJS) $(MAIN_OBJ)
 	$(CC) $(CFLAGS) $^ -o $(NAME)
-
-$(LIBFT):
-	@git submodule update --init --recursive
-	@$(MAKE) -C $(LIBFT_DIR)
 
 $(ODIR):
 	mkdir -p $@
