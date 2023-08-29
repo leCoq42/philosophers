@@ -8,7 +8,7 @@ INC_DIR		:=  ./include
 
 #=================== LIBRARIES ===================#
 
-CFLAGS		:=	-Wextra -Wall -Werror -lpthread -lc
+CFLAGS		:=	-Wextra -Wall -Werror -pthread -lc
 
 ifdef OPTIM
 	CFLAG += -Ofast -flto -march=native
