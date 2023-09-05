@@ -38,7 +38,7 @@ static int	init_config(t_main *main, int argc, char **argv)
 	if (argc == 6)
 		config->num_times_to_eat = philo_atoi(argv[5]);
 	else
-		config->num_times_to_eat = 0;
+		config->num_times_to_eat = -1;
 	if (check_config_params(config, argc) != 0)
 		return (free(config), -1);
 	main->config = config;
@@ -78,9 +78,9 @@ static int	init_philos(t_main *main)
 		main->philos[idx]->main = main;
 		main->philos[idx]->idx = idx;
 		main->philos[idx]->state = SLEEPING;
-		main->philos[idx]->time_of_last_meal = 0;
-		if (pthread_create(&main->philos[idx]->tid, NULL, philo_func, main->philos[idx]) != 0)
-			return (-1);
+		/* main->philos[idx]->time_of_last_meal = 0; */
+		/* if (pthread_create(&main->philos[idx]->tid, NULL, philo_func, main->philos[idx]) != 0) */
+		/* 	return (-1); */
 		idx++;
 	}
 	main->philos[idx] = NULL;

@@ -50,6 +50,7 @@ typedef struct	s_philo
 
 t_main		*init_main(int argc, char **argv);
 void		free_all(t_main *main);
+int			philo_run(t_main *main);
 void		*philo_func(void *arg);
 long long	philo_atoi(const char *str);
 int			calc_elapsed(int start_time);
@@ -59,10 +60,7 @@ void		ft_putstr_fd(const char *s, int fd);
 /* void		write_synced(t_philo *philo); */
 void		grab_forks(t_philo *philo, int *forks);
 void		down_forks(t_philo *philo, int *forks);
-
-
-
-
+void		join_threads(t_philo **philos);
 
 
 

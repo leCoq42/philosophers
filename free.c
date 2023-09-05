@@ -36,6 +36,18 @@ static void	free_forks(pthread_mutex_t **forks)
 	free(forks);
 }
 
+void	join_threads(t_philo **philos)
+{
+	int	idx;
+
+	idx = 0;
+	while (philos[idx])
+	{
+		pthread_join(philos[idx]->tid, NULL);
+		idx++;
+	}
+}
+
 
 void	free_all(t_main *main)
 {

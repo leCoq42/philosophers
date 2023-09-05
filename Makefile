@@ -1,14 +1,14 @@
 
-NAME		:= philo
+NAME	:= philo
 
 #=================== DIRECTORIES ===================#
-OBJ_DIR		:=	./obj
-SRC_DIR		:=	./src
-INC_DIR		:=  ./include
+OBJ_DIR	:=	./obj
+SRC_DIR	:=	.
+INC_DIR	:=  .
 
 #=================== LIBRARIES ===================#
 
-CFLAGS		:=	-Wextra -Wall -Werror -pthread -lc
+CFLAGS		:=	-Wextra -Wall -Werror -pthread#-lc
 
 ifdef OPTIM
 	CFLAG += -Ofast -flto -march=native
@@ -19,23 +19,23 @@ ifdef DEBUG
 endif
 
 ifdef FSAN
-	CFLAGS += -fsanitize=address,undefined
+	# CFLAGS += -fsanitize=address,undefined
+	CFLAGS += -fsanitize=thread
 endif
 
 #=================== GENERAL VARIABLES ===================#
 
 INCLUDE	:=	$(addprefix -I,$(INC_DIR))
 
-MAIN	:=	src/main.c
+MAIN	:=	main.c
 
-SRC		:=	
+SRC		:=	init.c utils.c free.c philo.c time.c
 
 
 ODIR	:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))
-SRC     :=	$(SRC:%=$(SRC_DIR)/%)
 
-MAIN_OBJ:=	$(MAIN:src/%.c=$(OBJ_DIR)/%.o)
-OBJS	:=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+MAIN_OBJ:=	$(MAIN:%.c=$(OBJ_DIR)/%.o)
+OBJS	:=	$(SRC:%.c=$(OBJ_DIR)/%.o)
 
 
 #===============================================#
