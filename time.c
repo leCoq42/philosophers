@@ -3,26 +3,25 @@
 
 // int	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
 
-/* int	get_timestamp(struct timeval *time) */
-/* { */
-/* 	struct timeval	time_struct; */
-/* 	int				timestamp; */
-/**/
-/* 	if (gettimeofday(time_struct, NULL) == -1) */
-/* 		return (-1); */
-/* 	timestamp = time_struct.tv_sec * 1000 + time_struct.tv_usec / 1000; */
-/* 	return (timestamp); */
-/* } */
 
-int	calc_elapsed(struct timeval start)
+int	get_start_time(int *start_time)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (-1);
+	*start_time = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (0);
+}
+
+int	calc_elapsed(int start_time)
 {
 	struct timeval	cur;
 	int				passed;
-
 	
 	if (gettimeofday(&cur, NULL) == -1)
 		return (-1);
-	passed = (cur.tv_sec - start.tv_sec) * 1000 + (cur.tv_usec - start.tv_usec) / 1000;
+	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time ;
 	return (passed);
 }
 

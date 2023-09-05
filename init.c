@@ -13,13 +13,12 @@ t_main	*init_main(int argc, char **argv)
 	if (!main)
 		return (NULL);
 	memset(main, 0, sizeof(t_main));
-	pthread_mutex_init(main->print, NULL);
+	pthread_mutex_init(&main->print_lock, NULL);
 	if (init_config(main, argc, argv) != 0)
 		return (free_all(main), NULL);
-	printf("test init_main\n");
-	if (init_philos(main) != 0)
-		return (free_all(main), NULL);
 	if (init_forks(main) != 0)
+		return (free_all(main), NULL);
+	if (init_philos(main) != 0)
 		return (free_all(main), NULL);
 	return (main);
 }
@@ -80,12 +79,11 @@ static int	init_philos(t_main *main)
 		main->philos[idx]->idx = idx;
 		main->philos[idx]->state = SLEEPING;
 		main->philos[idx]->time_of_last_meal = 0;
-		if (pthread_create(main->philos[idx]->tid, NULL, philo_func, main) != 0)
+		if (pthread_create(&main->philos[idx]->tid, NULL, philo_func, main->philos[idx]) != 0)
 			return (-1);
 		idx++;
 	}
 	main->philos[idx] = NULL;
-	printf("test init_philo\n");
 	return (0);
 }
 

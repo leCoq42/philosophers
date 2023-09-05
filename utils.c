@@ -45,3 +45,13 @@ static void	ft_putchar_fd(char c, int fd)
 {
 	write(fd, &c, 1);
 }
+
+void	ft_putstr_fd(const char *s, int fd)
+{
+	if (fd < 0)
+		return ;
+	if (!s)
+		return ;
+	while (*s)
+		write(fd, s++, 1);
+}
