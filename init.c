@@ -62,7 +62,7 @@ static int	check_config_params(t_config config, int argc)
 
 static int	init_philos(t_main *main)
 {
-	int	idx;
+	size_t	idx;
 	
 	idx = 0;
 	main->philos = malloc(sizeof(t_philo) * (main->config.num_philos + 1));
@@ -89,7 +89,7 @@ static int	init_philos(t_main *main)
 
 static int	init_forks(t_main *main)
 {
-	int	idx;
+	size_t	idx;
 
 	idx = 0;
 	main->forks = malloc(sizeof(pthread_mutex_t) * (main->config.num_philos + 1));
