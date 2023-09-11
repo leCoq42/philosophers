@@ -55,7 +55,7 @@ void		free_all(t_main *main);
 int			philo_run(t_main *main);
 void		*philo_func(void *arg);
 int			philo_atoi(const char *str);
-int64_t			calc_elapsed(int64_t start_time);
+int64_t		calc_elapsed(int64_t start_time);
 int64_t		get_start_time(int64_t *start_time);
 void		ft_putnbr_fd(int n, int fd);
 void		ft_putstr_fd(const char *s, int fd);
