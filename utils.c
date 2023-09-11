@@ -2,10 +2,10 @@
 
 static void	ft_putchar_fd(char c, int fd);
 
-long long	philo_atoi(const char *str)
+int	philo_atoi(const char *str)
 {
-	long long	val;
-	int			sign;
+	int	val;
+	int	sign;
 
 	val = 0;
 	sign = 1;

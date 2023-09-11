@@ -49,12 +49,12 @@
 
 void	join_threads(t_philo *philos)
 {
-	int	idx;
+	size_t	idx;
 
 	idx = 0;
 	while (idx > philos->main->config.num_philos)
 	{
-		pthread_join(philos[idx].tid, NULL);
+		pthread_join(philos[idx].thread, NULL);
 		idx++;
 	}
 }
