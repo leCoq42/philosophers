@@ -10,9 +10,9 @@ int	philo_run(t_main *main)
 	int	i;
 
 	i = 0;
-	while (i < main->config->num_philos)
+	while (i < main->config.num_philos)
 	{
-		if (pthread_create(&main->philos[i]->tid, NULL, philo_func, main->philos[i]) != 0)
+		if (pthread_create(&main->philos[i].tid, NULL, philo_func, &main->philos[i]) != 0)
 			return (1);
 		i++;
 	}
@@ -29,16 +29,16 @@ void	*philo_func(void *arg)
 	philo = (t_philo *)arg;
 	forks[RIGHT] = philo->idx;
 	forks[LEFT] = philo->idx + 1;
-	if (forks[LEFT] == philo->main->config->num_philos)
+	if (forks[LEFT] == philo->main->config.num_philos)
 		forks[LEFT] = 0;
 	/* pthread_mutex_lock(&philo->main->print_lock); */
 	/* printf("philo %d is born!, Right fork: %d, Left fork: %d.\n", philo->idx, forks[RIGHT], forks[LEFT]); */
 	/* pthread_mutex_unlock(&philo->main->print_lock); */
 	i = 0;
-	if (philo->main->config->num_times_to_eat == -1)
+	if (philo->main->config.num_times_to_eat == -1)
 		goal = LONG_MAX;
 	else
-		goal = philo->main->config->num_times_to_eat;
+		goal = philo->main->config.num_times_to_eat;
 	while (i++ < goal)
 	{
 		grab_forks(philo, forks);
@@ -51,11 +51,11 @@ void	*philo_func(void *arg)
 
 void	grab_forks(t_philo *philo, int *forks)
 {
-	pthread_mutex_lock(philo->main->forks[forks[RIGHT]]);
+	pthread_mutex_lock(&philo->main->forks[forks[RIGHT]]);
 	pthread_mutex_lock(&philo->main->print_lock);
 	printf("%d philo %d has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
-	pthread_mutex_lock(philo->main->forks[forks[LEFT]]);
+	pthread_mutex_lock(&philo->main->forks[forks[LEFT]]);
 	pthread_mutex_lock(&philo->main->print_lock);
 	printf("%d philo %d has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
@@ -64,11 +64,11 @@ void	grab_forks(t_philo *philo, int *forks)
 void	down_forks(t_philo *philo, int *forks)
 {
 	pthread_mutex_lock(&philo->main->print_lock);
-	pthread_mutex_unlock(philo->main->forks[forks[RIGHT]]);
+	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
 	printf("%d philo %d put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	pthread_mutex_lock(&philo->main->print_lock);
-	pthread_mutex_unlock(philo->main->forks[forks[LEFT]]);
+	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
 	printf("%d philo %d put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 }
@@ -78,7 +78,7 @@ static void	eating(t_philo *philo)
 	pthread_mutex_lock(&philo->main->print_lock);
 	printf("%d philo %d is eating.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
-	usleep(philo->main->config->time_to_eat);
+	usleep(philo->main->config.time_to_eat);
 }
 
 static void	sleeping(t_philo *philo)
@@ -86,7 +86,7 @@ static void	sleeping(t_philo *philo)
 	pthread_mutex_lock(&philo->main->print_lock);
 	printf("%d philo %d is sleeping\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
-	usleep(philo->main->config->time_to_sleep);
+	usleep(philo->main->config.time_to_sleep);
 }
 
 /**/

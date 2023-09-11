@@ -32,11 +32,11 @@ typedef struct	s_config
 
 typedef struct	s_main
 {
-	t_config		*config;
-	pthread_mutex_t	**forks;
+	t_config		config;
+	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
-	struct s_philo	**philos;
-	int				start_time;
+	struct s_philo	*philos;
+	long long		start_time;
 }	t_main;
 
 typedef struct	s_philo
@@ -54,13 +54,13 @@ int			philo_run(t_main *main);
 void		*philo_func(void *arg);
 long long	philo_atoi(const char *str);
 int			calc_elapsed(int start_time);
-int			get_start_time(int *start_time);
+int			get_start_time(long long *start_time);
 void		ft_putnbr_fd(int n, int fd);
 void		ft_putstr_fd(const char *s, int fd);
 /* void		write_synced(t_philo *philo); */
 void		grab_forks(t_philo *philo, int *forks);
 void		down_forks(t_philo *philo, int *forks);
-void		join_threads(t_philo **philos);
+void		join_threads(t_philo *philos);
 
 
 

@@ -4,7 +4,7 @@
 // int	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
 
 
-int	get_start_time(int *start_time)
+int	get_start_time(long long *start_time)
 {
 	struct timeval	time;
 
@@ -17,7 +17,7 @@ int	get_start_time(int *start_time)
 int	calc_elapsed(int start_time)
 {
 	struct timeval	cur;
-	int				passed;
+	long long		passed;
 	
 	if (gettimeofday(&cur, NULL) == -1)
 		return (-1);

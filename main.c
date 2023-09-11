@@ -14,11 +14,11 @@ int	main(int argc, char **argv)
 		return (write(2, "init error!\n", 14), 1);
 	pthread_mutex_lock(&main->print_lock);
 	get_start_time(&main->start_time);
-	printf("start time: %i\n", main->start_time);
+	printf("start time: %lli\n", main->start_time);
 	pthread_mutex_unlock(&main->print_lock);
 	philo_run(main);
 	/* pthread_mutex_unlock(&start); */
-	sleep(1);
+	/* sleep(1); */
 	pthread_mutex_lock(&main->print_lock);
 	printf("time passed: %i\n", calc_elapsed(main->start_time));
 	pthread_mutex_unlock(&main->print_lock);
