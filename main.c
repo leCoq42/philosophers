@@ -6,12 +6,12 @@ int	main(int argc, char **argv)
 	/* pthread_mutex_t start; */
 
 	if (argc != 5 && argc != 6)
-		return (write(2, USAGE, sizeof(USAGE)), 1);
+		error_exit(USAGE, 2);
 
 	/* pthread_mutex_lock(&start); */
 	main = init_main(argc, argv);
 	if (!main)
-		return (write(2, "init error!\n", 14), 1);
+		error_exit("init error!\n", 2);
 	pthread_mutex_lock(&main->print_lock);
 	get_start_time(&main->start_time);
 	printf("start time:%ld\n", main->start_time);

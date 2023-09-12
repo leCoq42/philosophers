@@ -43,7 +43,8 @@ void	ft_putnbr_fd(int n, int fd)
 
 static void	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, 1);
+	if (write(fd, &c, 1) == -1)
+		return ;
 }
 
 void	ft_putstr_fd(const char *s, int fd)
@@ -53,5 +54,6 @@ void	ft_putstr_fd(const char *s, int fd)
 	if (!s)
 		return ;
 	while (*s)
-		write(fd, s++, 1);
+		if (write(fd, s++, 1) == -1)
+			return ;
 }

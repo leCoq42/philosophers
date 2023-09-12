@@ -53,11 +53,11 @@ void	grab_forks(t_philo *philo, size_t *forks)
 {
 	pthread_mutex_lock(&philo->main->forks[forks[RIGHT]]);
 	pthread_mutex_lock(&philo->main->print_lock);
-	printf("%d philo %zu has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	pthread_mutex_lock(&philo->main->forks[forks[LEFT]]);
 	pthread_mutex_lock(&philo->main->print_lock);
-	printf("%d philo %zu has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu has taken a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 }
 
@@ -65,18 +65,18 @@ void	down_forks(t_philo *philo, size_t *forks)
 {
 	pthread_mutex_lock(&philo->main->print_lock);
 	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
-	printf("%d philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	pthread_mutex_lock(&philo->main->print_lock);
 	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
-	printf("%d philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 }
 
 static void	eating(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->main->print_lock);
-	printf("%d philo %zu is eating.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu is eating.\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	usleep(philo->main->config.time_to_eat);
 }
@@ -84,7 +84,7 @@ static void	eating(t_philo *philo)
 static void	sleeping(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->main->print_lock);
-	printf("%d philo %zu is sleeping\n", calc_elapsed(philo->main->start_time), philo->idx);
+	printf("%ld philo %zu is sleeping\n", calc_elapsed(philo->main->start_time), philo->idx);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	usleep(philo->main->config.time_to_sleep);
 }

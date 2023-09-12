@@ -34,11 +34,11 @@ typedef struct	s_config
 
 typedef struct	s_main
 {
+	int64_t			start_time;
 	t_config		config;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_lock;
 	struct s_philo	*philos;
-	int64_t			start_time;
+	pthread_mutex_t	print_lock;
 }	t_main;
 
 typedef struct	s_philo
@@ -46,7 +46,7 @@ typedef struct	s_philo
 	size_t				idx;
 	pthread_t			thread;
 	enum t_philo_state	state;
-	int64_t					time_of_last_meal;
+	int64_t				time_of_last_meal;
 	t_main				*main;
 }	t_philo;
 
@@ -63,6 +63,7 @@ void		ft_putstr_fd(const char *s, int fd);
 void		grab_forks(t_philo *philo, size_t *forks);
 void		down_forks(t_philo *philo, size_t *forks);
 void		join_threads(t_philo *philos);
+void		error_exit(char *msg, int status);
 
 
 
