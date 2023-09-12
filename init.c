@@ -20,6 +20,7 @@ t_main	*init_main(int argc, char **argv)
 		return (free_all(main), NULL);
 	if (init_philos(main) != 0)
 		return (free_all(main), NULL);
+	main->philos_done = 0;
 	return (main);
 }
 

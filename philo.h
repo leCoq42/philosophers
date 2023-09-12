@@ -20,16 +20,17 @@ enum	t_philo_state
 	EATING,
 	SLEEPING,
 	THINKING,
-	DEAD
+	DEAD,
+	DONE
 };
 
 typedef struct	s_config
 {
-	size_t		num_philos;
-	size_t		time_to_die;
-	size_t		time_to_eat;
-	size_t		time_to_sleep;
-	int64_t		num_times_to_eat;
+	uint8_t	num_philos;
+	size_t	time_to_die;
+	size_t	time_to_eat;
+	size_t	time_to_sleep;
+	int64_t	num_times_to_eat;
 }	t_config;
 
 typedef struct	s_main
@@ -39,6 +40,7 @@ typedef struct	s_main
 	pthread_mutex_t	*forks;
 	struct s_philo	*philos;
 	pthread_mutex_t	print_lock;
+	uint8_t			philos_done;
 }	t_main;
 
 typedef struct	s_philo
@@ -50,21 +52,19 @@ typedef struct	s_philo
 	t_main				*main;
 }	t_philo;
 
-t_main		*init_main(int argc, char **argv);
-void		free_all(t_main *main);
-int			philo_run(t_main *main);
-void		*philo_func(void *arg);
-int			philo_atoi(const char *str);
-int64_t		calc_elapsed(int64_t start_time);
-int64_t		get_start_time(int64_t *start_time);
-void		ft_putnbr_fd(int n, int fd);
-void		ft_putstr_fd(const char *s, int fd);
+t_main	*init_main(int argc, char **argv);
+void	free_all(t_main *main);
+int		philo_run(t_main *main);
+void	*philo_func(void *arg);
+int		philo_atoi(const char *str);
+int64_t	calc_elapsed(int64_t start_time);
+int64_t	get_start_time(int64_t *start_time);
+void	ft_putnbr_fd(int n, int fd);
+void	ft_putstr_fd(const char *s, int fd);
+void	join_threads(t_philo *philos);
+void	error_exit(char *msg, int status);
+int8_t	observer(t_main *main);
 /* void		write_synced(t_philo *philo); */
-void		grab_forks(t_philo *philo, size_t *forks);
-void		down_forks(t_philo *philo, size_t *forks);
-void		join_threads(t_philo *philos);
-void		error_exit(char *msg, int status);
-
 
 
 #	endif

@@ -12,18 +12,30 @@ int	main(int argc, char **argv)
 	main = init_main(argc, argv);
 	if (!main)
 		error_exit("init error!\n", 2);
-	pthread_mutex_lock(&main->print_lock);
 	get_start_time(&main->start_time);
+	pthread_mutex_lock(&main->print_lock);
 	printf("start time:%ld\n", main->start_time);
 	pthread_mutex_unlock(&main->print_lock);
 	philo_run(main);
+	observer(main);
 	/* pthread_mutex_unlock(&start); */
-	/* sleep(1); */
-	pthread_mutex_lock(&main->print_lock);
-	printf("time passed: %ld\n", calc_elapsed(main->start_time));
-	pthread_mutex_unlock(&main->print_lock);
 	join_threads(main->philos);
 	free_all(main);
 	return(0);
 }
 
+int8_t	observer(t_main *main)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (main->philos_done < main->config.num_philos)
+	{
+		if (main->philos[idx].state == 3)
+			break ;
+		idx++;
+		if (idx == main->config.num_philos)
+			idx = 0;
+	}
+	return (0);
+}

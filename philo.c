@@ -2,6 +2,8 @@
 #include <limits.h>
 
 /* static void	print_locked(t_philo *philo); */
+static void	grab_forks(t_philo *philo, size_t *forks);
+static void	down_forks(t_philo *philo, size_t *forks);
 static void	eating(t_philo *philo);
 static void	sleeping(t_philo *philo);
 
@@ -21,8 +23,8 @@ int	philo_run(t_main *main)
 
 void	*philo_func(void *arg)
 {
-	t_philo		*philo;
-	size_t		forks[2];
+	t_philo	*philo;
+	size_t	forks[2];
 	int64_t	i;
 	int64_t	goal;
 
@@ -46,10 +48,11 @@ void	*philo_func(void *arg)
 		down_forks(philo, forks);
 		sleeping(philo);
 	}
+	philo->main->philos_done++;
 	return (NULL);
 }
 
-void	grab_forks(t_philo *philo, size_t *forks)
+static void	grab_forks(t_philo *philo, size_t *forks)
 {
 	pthread_mutex_lock(&philo->main->forks[forks[RIGHT]]);
 	pthread_mutex_lock(&philo->main->print_lock);
@@ -61,18 +64,6 @@ void	grab_forks(t_philo *philo, size_t *forks)
 	pthread_mutex_unlock(&philo->main->print_lock);
 }
 
-void	down_forks(t_philo *philo, size_t *forks)
-{
-	pthread_mutex_lock(&philo->main->print_lock);
-	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
-	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
-	pthread_mutex_unlock(&philo->main->print_lock);
-	pthread_mutex_lock(&philo->main->print_lock);
-	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
-	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
-	pthread_mutex_unlock(&philo->main->print_lock);
-}
-
 static void	eating(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->main->print_lock);
@@ -80,6 +71,19 @@ static void	eating(t_philo *philo)
 	pthread_mutex_unlock(&philo->main->print_lock);
 	usleep(philo->main->config.time_to_eat);
 }
+
+static void	down_forks(t_philo *philo, size_t *forks)
+{
+	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
+	pthread_mutex_lock(&philo->main->print_lock);
+	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	pthread_mutex_unlock(&philo->main->print_lock);
+	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+	pthread_mutex_lock(&philo->main->print_lock);
+	printf("%ld philo %zu put down a fork.\n", calc_elapsed(philo->main->start_time), philo->idx);
+	pthread_mutex_unlock(&philo->main->print_lock);
+}
+
 
 static void	sleeping(t_philo *philo)
 {
