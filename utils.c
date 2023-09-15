@@ -1,8 +1,8 @@
 #include	"philo.h"
 
-static void	ft_putchar_fd(char c, int fd);
+static void	ph_putchar_fd(char c, int fd);
 
-int	philo_atoi(const char *str)
+int	ph_atoi(const char *str)
 {
 	int	val;
 	int	sign;
@@ -20,7 +20,7 @@ int	philo_atoi(const char *str)
 	return (val * sign);
 }
 
-void	ft_putnbr_fd(int n, int fd)
+void	ph_putnbr_fd(int n, int fd)
 {
 	if (fd < 0)
 		return ;
@@ -37,17 +37,17 @@ void	ft_putnbr_fd(int n, int fd)
 		n *= -1;
 	}
 	if (n / 10 != 0)
-		ft_putnbr_fd(n / 10, fd);
-	ft_putchar_fd(n % 10 + '0', fd);
+		ph_putnbr_fd(n / 10, fd);
+	ph_putchar_fd(n % 10 + '0', fd);
 }
 
-static void	ft_putchar_fd(char c, int fd)
+static void	ph_putchar_fd(char c, int fd)
 {
 	if (write(fd, &c, 1) == -1)
 		return ;
 }
 
-void	ft_putstr_fd(const char *s, int fd)
+void	ph_putstr_fd(const char *s, int fd)
 {
 	if (fd < 0)
 		return ;
@@ -56,4 +56,18 @@ void	ft_putstr_fd(const char *s, int fd)
 	while (*s)
 		if (write(fd, s++, 1) == -1)
 			return ;
+}
+
+void	*ph_calloc(size_t count, size_t size)
+{
+	void			*mem;
+	unsigned char	*ptr;
+
+	mem = malloc(count * size);
+	if (!mem)
+		return (NULL);
+	ptr = (unsigned char *)mem;
+	while (size-- > 0)
+		*ptr++ = '\0';
+	return (mem);
 }

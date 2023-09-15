@@ -1,10 +1,8 @@
 #include "philo.h"
 
-
 // int	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
 
-
-int64_t	get_start_time(int64_t *start_time)
+int64_t	get_timestamp(int64_t *start_time)
 {
 	struct timeval	time;
 
@@ -24,6 +22,9 @@ int64_t	calc_elapsed(int64_t start_time)
 	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time ;
 	return (passed);
 }
+
+// TODO: custom_sleep
+
 
 /* int	main(void) */
 /* { */

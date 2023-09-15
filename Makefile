@@ -8,10 +8,10 @@ INC_DIR	:=  .
 
 #=================== LIBRARIES ===================#
 
-CFLAGS		:=	-Wextra -Wall -Werror -pthread#-lc
+CFLAGS	:=	-Wextra -Wall -Werror -pthread
 
 ifdef OPTIM
-	CFLAG += -Ofast -flto -march=native
+	CFLAGS += -Ofast -flto -march=native
 endif
 
 ifdef DEBUG
@@ -50,7 +50,7 @@ all: $(ODIR) $(NAME)
 
 .PHONY: optim
 optim:
-	@$(MAKE) OPTIM=1
+	$(MAKE) OPTIM=1
 
 .PHONY: reoptim
 reoptim:
