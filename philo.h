@@ -12,8 +12,20 @@
 #include	<limits.h>
 
 #define USAGE "Error: Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+#define GRAB "has taken a fork\n"
+#define EAT "is eating\n"
+#define SLEEP "is sleeping\n"
+#define DIED "died\n"
+#define THINK "is thinking\n"
+
 #define RIGHT 0
 #define LEFT 1
+
+#ifdef PRETTY_PRINT
+	#define FORMAT "timer:%8ldms, philo %3zu %s"
+#else
+	#define FORMAT "%ld %zu %s"
+#endif
 
 enum	t_philo_state
 {
@@ -26,47 +38,68 @@ enum	t_philo_state
 
 typedef struct	s_config
 {
-	size_t		num_philos;
-	uint64_t	time_to_die;
-	size_t		time_to_eat;
-	size_t		time_to_sleep;
-	int64_t		num_times_to_eat;
+	uint_fast8_t	num_philos;
+	uint_fast32_t	time_to_die_ms;
+	uint_fast32_t	time_to_eat_ms;
+	uint_fast32_t	time_to_sleep_ms;
+	uint_fast32_t	num_times_to_eat;
 }	t_config;
 
 typedef struct	s_main
 {
 	t_config		config;
-	int64_t			start_time;
+	uint_fast64_t	start_time;
 	struct s_philo	*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	start_lock;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	obs_lock;
-	uint8_t			philos_done;
+	uint_fast8_t	philos_done;
 }	t_main;
 
 typedef struct	s_philo
 {
-	size_t				idx;
-	int64_t				timestamp;
+	size_t				id;
+	uint_fast64_t		timestamp;
 	pthread_t			thread;
 	enum t_philo_state	state;
-	int64_t				time_of_last_meal;
+	uint_fast32_t		time_of_last_meal;
 	t_main				*main;
 }	t_philo;
 
+
+// init.c
 t_main	*init_main(int argc, char **argv);
+
+// free.c
 void	free_all(t_main *main);
-int		philo_run(t_main *main);
-void	*philo_func(void *arg);
+
+// philo.c
+void	philo_run(t_main *main);
+int		grim_reaper(t_philo *philo);
+
+// utils.c
 int		ph_atoi(const char *str);
-int64_t	calc_elapsed(int64_t start_time);
-int64_t	get_timestamp(int64_t *start_time);
 void	ph_putnbr_fd(int n, int fd);
 void	ph_putstr_fd(const char *s, int fd);
-void	error_exit(char *msg, int status);
-int8_t	observer(t_main *main);
 void	*ph_calloc(size_t count, size_t size);
 
+// time.c
+void			timestamp_ms(uint_fast64_t *start_time_ms);
+uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms);
+void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
+
+// error.c
+void	error_exit(char *msg, int status);
+
+// observer.c
+int8_t	observer(t_main *main);
+
+// actions.c
+void	grab_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
+void	eating(t_philo *philo);
+void	down_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
+void	sleeping(t_philo *philo);
+void	thinking(t_philo *philo);
 
 #	endif

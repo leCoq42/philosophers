@@ -1,4 +1,5 @@
 #include "philo.h"
+#include <stdint.h>
 
 int	main(int argc, char **argv)
 {
@@ -15,25 +16,3 @@ int	main(int argc, char **argv)
 	return(0);
 }
 
-int8_t	observer(t_main *main)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (1)
-	{
-		pthread_mutex_lock(&main->obs_lock);
-		if (main->philos_done >= main->config.num_philos || main->philos[idx].state == DEAD)
-		{
-			pthread_mutex_unlock(&main->obs_lock);
-			break ;
-		}
-		pthread_mutex_unlock(&main->obs_lock);
-		idx++;
-		pthread_mutex_lock(&main->obs_lock);
-		if (idx == main->config.num_philos)
-			idx = 0;
-		pthread_mutex_unlock(&main->obs_lock);
-	}
-	return (0);
-}

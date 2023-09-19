@@ -29,7 +29,7 @@ INCLUDE	:=	$(addprefix -I,$(INC_DIR))
 
 MAIN	:=	main.c
 
-SRC		:=	init.c utils.c free.c philo.c time.c error.c
+SRC		:=	init.c utils.c free.c philo.c time.c error.c observer.c actions.c
 
 
 ODIR	:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))

@@ -1,39 +1,37 @@
 #include "philo.h"
 
-// int	gettimeofday(struct timeval *restrict tp, void *restrict tzp);
-
-int64_t	get_timestamp(int64_t *start_time)
+void	timestamp_ms(uint_fast64_t *start_time_ms)
 {
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return (-1);
-	*start_time = time.tv_sec * 1000 + time.tv_usec / 1000;
-	return (0);
+		error_exit("gtod error\n", 1);
+	*start_time_ms = time.tv_sec * 1000 + time.tv_usec / 1000;
 }
 
-int64_t	calc_elapsed(int64_t start_time)
+uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms)
 {
 	struct timeval	cur;
-	int64_t			passed;
+	uint_fast32_t	passed;
 	
 	if (gettimeofday(&cur, NULL) == -1)
-		return (-1);
-	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time ;
+		error_exit("gtod error\n", 1);
+	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time_ms;
 	return (passed);
 }
 
-// TODO: custom_sleep
+void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
+{
+	uint_fast64_t	start_time_ms;
+	uint_fast32_t	elapsed_ms;
 
+	timestamp_ms(&start_time_ms);
+	while (1)
+	{
+		elapsed_ms = time_elapsed_ms(start_time_ms);
+		if (elapsed_ms >= sleeptime_ms)
+			break ;
+		usleep(100);
+	}
+}
 
-/* int	main(void) */
-/* { */
-/* 	struct timeval start; */
-/* 	int		time_elapsed; */
-/**/
-/* 	gettimeofday(&start, NULL); */
-/* 	sleep(5); */
-/* 	time_elapsed = calc_elapsed(start); */
-/* 	printf("time_elapsed: %d ms\n", time_elapsed); */
-/* 	return (0); */
-/* } */

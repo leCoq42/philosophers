@@ -30,14 +30,14 @@ static int	init_config(t_main *main, int argc, char **argv)
 {
 	t_config	config;
 
-	config.num_philos = (uint8_t)ph_atoi(argv[1]);
-	config.time_to_die = (size_t)ph_atoi(argv[2]) * 1000;
-	config.time_to_eat = (size_t)ph_atoi(argv[3]) * 1000;
-	config.time_to_sleep = (size_t)ph_atoi(argv[4]) * 1000;
+	config.num_philos = (uint_fast8_t)ph_atoi(argv[1]);
+	config.time_to_die_ms = (uint_fast32_t)ph_atoi(argv[2]);
+	config.time_to_eat_ms = (uint_fast32_t)ph_atoi(argv[3]);
+	config.time_to_sleep_ms = (uint_fast32_t)ph_atoi(argv[4]);
 	if (argc == 6)
-		config.num_times_to_eat = ph_atoi(argv[5]);
+		config.num_times_to_eat = (uint_fast32_t)ph_atoi(argv[5]);
 	else
-		config.num_times_to_eat = -1;
+		config.num_times_to_eat = 0;
 	if (check_config_params(config, argc) != 0)
 		return ( -1);
 	main->config = config;
@@ -46,16 +46,17 @@ static int	init_config(t_main *main, int argc, char **argv)
 
 static int	check_config_params(t_config config, int argc)
 {
+	(void)argc;
 	if (config.num_philos < 1)
 		return (-1);
-	if (config.time_to_die < 1)
+	if (config.time_to_die_ms < 1)
 		return (-1);
-	if (config.time_to_eat < 1)
+	if (config.time_to_eat_ms < 1)
 		return (-1);
-	if (config.time_to_sleep < 1)
+	if (config.time_to_sleep_ms < 1)
 		return (-1);
-	if (argc == 6 && config.num_times_to_eat < 1)
-		return (-1);
+	/* if (argc == 6 && config.num_times_to_eat < 0) */
+	/* 	return (-1); */
 	return (0);
 }
 
@@ -70,12 +71,8 @@ static int	init_philos(t_main *main)
 	memset(main->philos, 0, sizeof(t_philo) * (main->config.num_philos));
 	while(idx < main->config.num_philos)
 	{
-		/* main->philos[idx] = malloc(sizeof(t_philo)); */
-		/* if (!(main->philos[idx])) */
-		/* 	return (-1); */
-		/* memset(main->philos[idx], 0, sizeof(t_philo)); */
 		main->philos[idx].main = main;
-		main->philos[idx].idx = idx + 1;
+		main->philos[idx].id = idx + 1;
 		main->philos[idx].state = SLEEPING;
 		main->philos[idx].time_of_last_meal = 0;
 		idx++;
@@ -94,10 +91,6 @@ static int	init_forks(t_main *main)
 	memset(main->forks, 0 , sizeof(pthread_mutex_t) * (main->config.num_philos));
 	while (idx < main->config.num_philos)
 	{
-		/* main->forks[idx] = malloc(sizeof(pthread_mutex_t)); */
-		/* if (!(main->forks[idx])) */
-		/* 	return (-1); */
-		/* memset(main->forks[idx], 0, sizeof(pthread_mutex_t)); */
 		if (pthread_mutex_init(&main->forks[idx], NULL) != 0)
 			return (-1);
 		idx++;
