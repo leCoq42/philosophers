@@ -28,9 +28,9 @@ static void	*philo_func(void *arg)
 	philo = (t_philo *)arg;
 	forks[RIGHT] = philo->id - 1;
 	forks[LEFT] = philo->id % philo->main->config.num_philos;
+	timestamp_ms(&philo->timestamp);
 	pthread_mutex_lock(&philo->main->start_lock);
 	pthread_mutex_unlock(&philo->main->start_lock);
-	timestamp_ms(&philo->timestamp);
 	/* pthread_mutex_lock(&philo->main->print_lock); */
 	/* printf("philo id: %zu, right fork: %zu, left fork: %zu\n", philo->idx, forks[RIGHT], forks[LEFT]); */
 	/* pthread_mutex_unlock(&philo->main->print_lock); */
@@ -72,7 +72,9 @@ int	grim_reaper(t_philo *philo)
 	last_meal_ms = time_elapsed_ms(philo->timestamp);
 	if (last_meal_ms > philo->main->config.time_to_die_ms)
 	{
+		pthread_mutex_lock(&philo->main->print_lock);
 		printf(FORMAT, time_elapsed_ms(philo->main->start_time), philo->id, DIED);
+		pthread_mutex_unlock(&philo->main->print_lock);
 		pthread_mutex_lock(&philo->main->obs_lock);
 		philo->state = DEAD;
 		pthread_mutex_unlock(&philo->main->obs_lock);
