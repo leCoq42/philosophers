@@ -29,6 +29,7 @@
 
 enum	t_philo_state
 {
+	ALIVE,
 	EATING,
 	SLEEPING,
 	THINKING,
@@ -54,6 +55,7 @@ typedef struct	s_main
 	pthread_mutex_t	start_lock;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	obs_lock;
+	enum t_philo_state	state;
 	uint_fast8_t	philos_done;
 }	t_main;
 
@@ -62,7 +64,6 @@ typedef struct	s_philo
 	size_t				id;
 	uint_fast64_t		timestamp;
 	pthread_t			thread;
-	enum t_philo_state	state;
 	uint_fast32_t		time_of_last_meal;
 	t_main				*main;
 }	t_philo;
@@ -76,7 +77,7 @@ void	free_all(t_main *main);
 
 // philo.c
 void	philo_run(t_main *main);
-int		grim_reaper(t_philo *philo);
+int		grim_reaper(t_philo *philo, char *action);
 
 // utils.c
 int		ph_atoi(const char *str);
@@ -97,9 +98,7 @@ int8_t	observer(t_main *main);
 
 // actions.c
 void	grab_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
-void	eating(t_philo *philo);
-void	down_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
+void	eating(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
 void	sleeping(t_philo *philo);
-void	thinking(t_philo *philo);
 
 #	endif

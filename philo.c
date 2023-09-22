@@ -32,7 +32,7 @@ static void	*philo_func(void *arg)
 	pthread_mutex_lock(&philo->main->start_lock);
 	pthread_mutex_unlock(&philo->main->start_lock);
 	/* pthread_mutex_lock(&philo->main->print_lock); */
-	/* printf("philo id: %zu, right fork: %zu, left fork: %zu\n", philo->idx, forks[RIGHT], forks[LEFT]); */
+	/* printf("philo id: %zu, right fork: %hhu, left fork: %hhu\n", philo->id, forks[RIGHT], forks[LEFT]); */
 	/* pthread_mutex_unlock(&philo->main->print_lock); */
 	routine_loop(philo, forks, philo->main->config.num_times_to_eat);
 	pthread_mutex_lock(&philo->main->obs_lock);
@@ -48,16 +48,14 @@ static void	routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal
 
 	i = 0;
 	if (uneven)
-		ph_sleep_ms(philo->main->config.time_to_eat_ms / 2);
+		sleeping(philo);
 	while (1)
 	{
 		if (goal != 0 && i >= goal)
 			break ;
 		grab_forks(philo, forks, uneven);
-		eating(philo);
-		down_forks(philo, forks, uneven);
+		eating(philo, forks, uneven);
 		sleeping(philo);
-		thinking(philo);
 		if (i == INT_FAST32_MAX)
 			i = 0;
 		else
@@ -65,20 +63,31 @@ static void	routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal
 	}
 }
 
-int	grim_reaper(t_philo *philo)
+int	grim_reaper(t_philo *philo, char *action)
 {
 	uint_fast32_t	last_meal_ms;
 
 	last_meal_ms = time_elapsed_ms(philo->timestamp);
+
+	pthread_mutex_lock(&philo->main->obs_lock);
+	if (philo->main->state == DEAD)
+	{
+		pthread_mutex_unlock(&philo->main->obs_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->main->obs_lock);
 	if (last_meal_ms > philo->main->config.time_to_die_ms)
 	{
 		pthread_mutex_lock(&philo->main->print_lock);
 		printf(FORMAT, time_elapsed_ms(philo->main->start_time), philo->id, DIED);
 		pthread_mutex_unlock(&philo->main->print_lock);
 		pthread_mutex_lock(&philo->main->obs_lock);
-		philo->state = DEAD;
+		philo->main->state = DEAD;
 		pthread_mutex_unlock(&philo->main->obs_lock);
 		return (1);
 	}
+	pthread_mutex_lock(&philo->main->print_lock);
+	printf(FORMAT, time_elapsed_ms(philo->main->start_time), philo->id, action);
+	pthread_mutex_unlock(&philo->main->print_lock);
 	return (0);
 }

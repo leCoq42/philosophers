@@ -8,7 +8,7 @@ int8_t	observer(t_main *main)
 	while (1)
 	{
 		pthread_mutex_lock(&main->obs_lock);
-		if (main->philos_done >= main->config.num_philos || main->philos[idx].state == DEAD)
+		if (main->philos_done >= main->config.num_philos || main->state == DEAD)
 		{
 			pthread_mutex_unlock(&main->obs_lock);
 			/* break ; */

@@ -17,6 +17,7 @@ t_main	*init_main(int argc, char **argv)
 	pthread_mutex_init(&main->print_lock, NULL);
 	pthread_mutex_init(&main->obs_lock, NULL);
 	pthread_mutex_init(&main->start_lock, NULL);
+	main->state = ALIVE;
 	if (init_config(main, argc, argv) != 0)
 		return (free_all(main), NULL);
 	if (init_forks(main) != 0)
@@ -73,7 +74,7 @@ static int	init_philos(t_main *main)
 	{
 		main->philos[idx].main = main;
 		main->philos[idx].id = idx + 1;
-		main->philos[idx].state = SLEEPING;
+		/* main->philos[idx].state = ALIVE; */
 		main->philos[idx].time_of_last_meal = 0;
 		idx++;
 	}
