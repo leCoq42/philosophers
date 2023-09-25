@@ -1,46 +1,49 @@
 #include "philo.h"
 
-void	grab_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven)
+int_fast8_t	grab_forks(t_philo *philo, uint_fast8_t *forks)
 {
-	/* if (uneven) */
-	/* { */
-	/* 	grim_reaper(philo, GRAB); */
-	/* 	pthread_mutex_lock(&philo->main->forks[forks[LEFT]]); */
-	/* 	grim_reaper(philo, GRAB); */
-	/* 	pthread_mutex_lock(&philo->main->forks[forks[RIGHT]]); */
-	/* } */
-	/* else */
-	/* { */
-	(void)uneven;
-	grim_reaper(philo, GRAB);
 	pthread_mutex_lock(&philo->main->forks[forks[RIGHT]]);
-	grim_reaper(philo, GRAB);
+	if (grim_reaper(philo, GRAB) == 1)
+	{
+		pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+		return (1);
+	}
 	pthread_mutex_lock(&philo->main->forks[forks[LEFT]]);
-	/* } */
+	if (grim_reaper(philo, GRAB) == 1)
+	{
+		pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+		pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
+		return (1);
+	}
+	return (0);
 }
 
-void	eating(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven)
+int_fast8_t	eating(t_philo *philo, uint_fast8_t *forks)
 {
-	(void)uneven;
-	grim_reaper(philo, EAT);
+	if (grim_reaper(philo, EAT) == 1)
+	{
+		pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+		pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
+		return (1);
+	}
 	timestamp_ms(&philo->timestamp);
 	ph_sleep_ms(philo->main->config.time_to_eat_ms);
-	/* if (uneven) */
-	/* { */
-	/* 	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]); */
-	/* 	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]); */
-	/* } */
-	/* else */
-	/* { */
-	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
-	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
-	/* } */
+	return (0);
 }
 
-void	sleeping(t_philo *philo)
+int_fast8_t	sleeping(t_philo *philo, uint_fast8_t *forks)
 {
-	grim_reaper(philo, SLEEP);
+	if (grim_reaper(philo, SLEEP) == 1)
+	{
+		pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+		pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
+	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
 	ph_sleep_ms(philo->main->config.time_to_sleep_ms);
-	grim_reaper(philo, THINK);
+	if (grim_reaper(philo, THINK) == 1)
+		return (1);
+	return (0);
 }
 

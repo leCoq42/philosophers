@@ -1,27 +1,41 @@
 #include "philo.h"
 
-static void	stop_philo(t_philo *philos);
+static void	join_threads(t_main *main);
+static void	destroy_mutexes(t_main *main);
 
 void	free_all(t_main *main)
 {
-	stop_philo(main->philos);
+	join_threads(main);
+	destroy_mutexes(main);
 	/* free(main->philos); */
 	/* free(main->forks); */
 	/* free(main); */
 }
 
-static void	stop_philo(t_philo *philos)
+static void	join_threads(t_main *main)
 {
 	size_t	idx;
 
 	idx = 0;
-	while (idx < philos->main->config.num_philos)
+	while (idx < main->config.num_philos)
 	{
-		pthread_join(philos[idx].thread, NULL);
-		pthread_mutex_destroy(&philos->main->forks[idx]);
+		pthread_join(main->philos[idx].thread, NULL);
 		idx++;
 	}
-	pthread_mutex_destroy(&philos->main->print_lock);
-	pthread_mutex_destroy(&philos->main->obs_lock);
+}
+
+static void	destroy_mutexes(t_main *main)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (idx < main->config.num_philos)
+	{
+		pthread_mutex_destroy(&main->forks[idx]);
+		idx++;
+	}
+	pthread_mutex_destroy(&main->start_lock);
+	pthread_mutex_destroy(&main->print_lock);
+	pthread_mutex_destroy(&main->obs_lock);
 }
 

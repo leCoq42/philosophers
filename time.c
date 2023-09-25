@@ -30,8 +30,8 @@ void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
 	{
 		elapsed_ms = time_elapsed_ms(start_time_ms);
 		if (elapsed_ms >= sleeptime_ms)
-			break ;
-		usleep(100);
+			return ;
+		usleep(250);
 	}
 }
 

@@ -11,7 +11,7 @@ INC_DIR	:=  .
 CFLAGS	:=	-Wextra -Wall -Werror -pthread
 
 ifdef OPTIM
-	CFLAGS += -Ofast -flto -march=native
+	CFLAGS += -O3 -flto -march=native
 endif
 
 ifdef DEBUG

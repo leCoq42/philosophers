@@ -30,9 +30,6 @@
 enum	t_philo_state
 {
 	ALIVE,
-	EATING,
-	SLEEPING,
-	THINKING,
 	DEAD,
 	DONE
 };
@@ -48,42 +45,42 @@ typedef struct	s_config
 
 typedef struct	s_main
 {
-	t_config		config;
-	uint_fast64_t	start_time;
-	struct s_philo	*philos;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	start_lock;
-	pthread_mutex_t	print_lock;
-	pthread_mutex_t	obs_lock;
+	t_config			config;
+	uint_fast64_t		start_time;
+	struct s_philo		*philos;
+	pthread_mutex_t		*forks;
+	pthread_mutex_t		start_lock;
+	pthread_mutex_t		print_lock;
+	pthread_mutex_t		obs_lock;
 	enum t_philo_state	state;
-	uint_fast8_t	philos_done;
+	uint_fast8_t		philos_done;
 }	t_main;
 
 typedef struct	s_philo
 {
-	size_t				id;
-	uint_fast64_t		timestamp;
-	pthread_t			thread;
-	uint_fast32_t		time_of_last_meal;
-	t_main				*main;
+	size_t			id;
+	uint_fast64_t	timestamp;
+	pthread_t		thread;
+	uint_fast32_t	time_of_last_meal;
+	t_main			*main;
 }	t_philo;
 
-
+// PROTOTYPES
 // init.c
-t_main	*init_main(int argc, char **argv);
+t_main			*init_main(int argc, char **argv);
 
 // free.c
-void	free_all(t_main *main);
+void			free_all(t_main *main);
 
 // philo.c
-void	philo_run(t_main *main);
-int		grim_reaper(t_philo *philo, char *action);
+void			philo_run(t_main *main);
+int_fast8_t		grim_reaper(t_philo *philo, char *action);
 
 // utils.c
-int		ph_atoi(const char *str);
-void	ph_putnbr_fd(int n, int fd);
-void	ph_putstr_fd(const char *s, int fd);
-void	*ph_calloc(size_t count, size_t size);
+int				ph_atoi(const char *str);
+void			ph_putnbr_fd(int n, int fd);
+void			ph_putstr_fd(const char *s, int fd);
+void			*ph_calloc(size_t count, uint_fast32_t size);
 
 // time.c
 void			timestamp_ms(uint_fast64_t *start_time_ms);
@@ -91,14 +88,14 @@ uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms);
 void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
 
 // error.c
-void	error_exit(char *msg, int status);
+void			error_exit(char *msg, int status);
 
 // observer.c
-int8_t	observer(t_main *main);
+int_fast8_t		observer(t_main *main);
 
 // actions.c
-void	grab_forks(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
-void	eating(t_philo *philo, uint_fast8_t *forks, const uint_fast8_t uneven);
-void	sleeping(t_philo *philo);
+int_fast8_t		grab_forks(t_philo *philo, uint_fast8_t *forks);
+int_fast8_t		eating(t_philo *philo, uint_fast8_t *forks);
+int_fast8_t		sleeping(t_philo *philo, uint_fast8_t *forks);
 
 #	endif
