@@ -14,10 +14,10 @@ t_main	*init_main(int argc, char **argv)
 		return (NULL);
 	memset(main, 0, sizeof(t_main));
 	main->philos_done = 0;
+	main->stop = 0;
 	pthread_mutex_init(&main->print_lock, NULL);
 	pthread_mutex_init(&main->obs_lock, NULL);
 	pthread_mutex_init(&main->start_lock, NULL);
-	main->state = ALIVE;
 	if (init_config(main, argc, argv) != 0)
 		return (free_all(main), NULL);
 	if (init_forks(main) != 0)
@@ -40,7 +40,7 @@ static int	init_config(t_main *main, int argc, char **argv)
 	else
 		config.num_times_to_eat = 0;
 	if (check_config_params(config, argc) != 0)
-		return ( -1);
+		return (-1);
 	main->config = config;
 	return (0);
 }
@@ -64,18 +64,17 @@ static int	check_config_params(t_config config, int argc)
 static int	init_philos(t_main *main)
 {
 	size_t	idx;
-	
+
 	idx = 0;
 	main->philos = malloc(sizeof(t_philo) * (main->config.num_philos));
 	if (!(main->philos))
 		return (-1);
 	memset(main->philos, 0, sizeof(t_philo) * (main->config.num_philos));
-	while(idx < main->config.num_philos)
+	while (idx < main->config.num_philos)
 	{
 		main->philos[idx].main = main;
 		main->philos[idx].id = idx + 1;
-		/* main->philos[idx].state = ALIVE; */
-		main->philos[idx].time_of_last_meal = 0;
+		main->philos[idx].state = ALIVE;
 		idx++;
 	}
 	return (0);
@@ -89,7 +88,7 @@ static int	init_forks(t_main *main)
 	main->forks = malloc(sizeof(pthread_mutex_t) * (main->config.num_philos));
 	if (!(main->forks))
 		return (-1);
-	memset(main->forks, 0 , sizeof(pthread_mutex_t) * (main->config.num_philos));
+	memset(main->forks, 0, sizeof(pthread_mutex_t) * (main->config.num_philos));
 	while (idx < main->config.num_philos)
 	{
 		if (pthread_mutex_init(&main->forks[idx], NULL) != 0)

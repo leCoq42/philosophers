@@ -1,40 +1,40 @@
 #ifndef PHILO_H
 # define PHILO_H
-	
-#include	<stddef.h>
-#include	<stdint.h>
-#include	<stdlib.h>
-#include	<unistd.h>
-#include	<stdio.h>
-#include	<string.h>
-#include	<sys/time.h>
-#include	<pthread.h>
-#include	<limits.h>
 
-#define USAGE "Error: Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
-#define GRAB "has taken a fork\n"
-#define EAT "is eating\n"
-#define SLEEP "is sleeping\n"
-#define DIED "died\n"
-#define THINK "is thinking\n"
+# include <stddef.h>
+# include <stdint.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <string.h>
+# include <sys/time.h>
+# include <pthread.h>
+# include <limits.h>
 
-#define RIGHT 0
-#define LEFT 1
+# define USAGE "Error: Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+# define GRAB "has taken a fork\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define DIED "died\n"
+# define THINK "is thinking\n"
 
-#ifdef PRETTY_PRINT
-	#define FORMAT "timer:%8ldms, philo %3zu %s"
-#else
-	#define FORMAT "%ld %zu %s"
-#endif
+# define RIGHT 0
+# define LEFT 1
 
-enum	t_philo_state
+# ifdef PRETTY_PRINT
+# define FORMAT "timer:%8ldms, philo %3zu %s"
+# else
+# define FORMAT "%ld %zu %s"
+# endif
+
+enum	e_philo_state
 {
 	ALIVE,
 	DEAD,
 	DONE
 };
 
-typedef struct	s_config
+typedef struct s_config
 {
 	uint_fast8_t	num_philos;
 	uint_fast32_t	time_to_die_ms;
@@ -43,7 +43,7 @@ typedef struct	s_config
 	uint_fast32_t	num_times_to_eat;
 }	t_config;
 
-typedef struct	s_main
+typedef struct s_main
 {
 	t_config			config;
 	uint_fast64_t		start_time;
@@ -52,17 +52,17 @@ typedef struct	s_main
 	pthread_mutex_t		start_lock;
 	pthread_mutex_t		print_lock;
 	pthread_mutex_t		obs_lock;
-	enum t_philo_state	state;
 	uint_fast8_t		philos_done;
+	int					stop;
 }	t_main;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
-	size_t			id;
-	uint_fast64_t	timestamp;
-	pthread_t		thread;
-	uint_fast32_t	time_of_last_meal;
-	t_main			*main;
+	size_t				id;
+	enum e_philo_state	state;
+	uint_fast64_t		timestamp;
+	pthread_t			thread;
+	t_main				*main;
 }	t_philo;
 
 // PROTOTYPES
@@ -74,7 +74,8 @@ void			free_all(t_main *main);
 
 // philo.c
 void			philo_run(t_main *main);
-int_fast8_t		grim_reaper(t_philo *philo, char *action);
+void			routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal);
+int				check_print(t_philo *philo, char *action);
 
 // utils.c
 int				ph_atoi(const char *str);
@@ -91,11 +92,11 @@ void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
 void			error_exit(char *msg, int status);
 
 // observer.c
-int_fast8_t		observer(t_main *main);
+int				observer(t_main *main);
 
 // actions.c
-int_fast8_t		grab_forks(t_philo *philo, uint_fast8_t *forks);
-int_fast8_t		eating(t_philo *philo, uint_fast8_t *forks);
-int_fast8_t		sleeping(t_philo *philo, uint_fast8_t *forks);
+int				grab_forks(t_philo *philo, uint_fast8_t *forks);
+int				eating(t_philo *philo, uint_fast8_t *forks);
+int				sleeping(t_philo *philo, uint_fast8_t *forks);
 
-#	endif
+#endif

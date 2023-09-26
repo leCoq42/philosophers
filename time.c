@@ -13,7 +13,7 @@ uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms)
 {
 	struct timeval	cur;
 	uint_fast32_t	passed;
-	
+
 	if (gettimeofday(&cur, NULL) == -1)
 		error_exit("gtod error\n", 1);
 	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time_ms;
@@ -34,4 +34,3 @@ void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
 		usleep(250);
 	}
 }
-

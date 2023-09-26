@@ -12,6 +12,5 @@ int	main(int argc, char **argv)
 	philo_run(main);
 	observer(main);
 	free_all(main);
-	return(0);
+	return (0);
 }
-

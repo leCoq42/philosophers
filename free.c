@@ -7,9 +7,9 @@ void	free_all(t_main *main)
 {
 	join_threads(main);
 	destroy_mutexes(main);
-	/* free(main->philos); */
-	/* free(main->forks); */
-	/* free(main); */
+	free(main->philos);
+	free(main->forks);
+	free(main);
 }
 
 static void	join_threads(t_main *main)
@@ -38,4 +38,3 @@ static void	destroy_mutexes(t_main *main)
 	pthread_mutex_destroy(&main->print_lock);
 	pthread_mutex_destroy(&main->obs_lock);
 }
-

@@ -11,7 +11,7 @@ INC_DIR	:=  .
 CFLAGS	:=	-Wextra -Wall -Werror -pthread
 
 ifdef OPTIM
-	CFLAGS += -O3 -flto -march=native
+	CFLAGS += -Ofast -flto -march=native
 endif
 
 ifdef DEBUG
@@ -41,9 +41,6 @@ OBJS	:=	$(SRC:%.c=$(OBJ_DIR)/%.o)
 #===============================================#
 #=================== RECIPES ===================#
 #===============================================#
-
-# echo:
-# 	@echo
 
 .PHONY: all
 all: $(ODIR) $(NAME)

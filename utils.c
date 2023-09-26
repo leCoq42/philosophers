@@ -1,4 +1,4 @@
-#include	"philo.h"
+#include "philo.h"
 
 static void	ph_putchar_fd(char c, int fd);
 
