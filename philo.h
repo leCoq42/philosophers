@@ -11,7 +11,7 @@
 # include <pthread.h>
 # include <limits.h>
 
-# define USAGE "Error: Usage: ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]\n"
+# define USAGE "Error: Usage: ./philo num_philos time_to_die time_to_eat time_to_sleep [num_times_to_eat]\n"
 # define GRAB "has taken a fork\n"
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
