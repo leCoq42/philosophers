@@ -60,7 +60,7 @@ typedef struct s_philo
 {
 	size_t				id;
 	enum e_philo_state	state;
-	uint_fast64_t		timestamp;
+	uint_fast64_t		last_meal_ms;
 	pthread_t			thread;
 	t_main				*main;
 }	t_philo;
@@ -71,14 +71,16 @@ t_main			*init_main(int argc, char **argv);
 
 // free.c
 void			free_all(t_main *main);
+void			join_threads(t_main *main, uint_fast8_t num);
+void	destroy_mutexes(t_main *main, uint_fast8_t num);
 
 // philo.c
-void			philo_run(t_main *main);
+int				create_threads(t_main *main);
 void			routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal);
 int				check_print(t_philo *philo, char *action);
 
 // utils.c
-int				ph_atoi(const char *str);
+long long		ph_atoi(const char *str);
 void			ph_putnbr_fd(int n, int fd);
 void			ph_putstr_fd(const char *s, int fd);
 void			*ph_calloc(size_t count, uint_fast32_t size);
@@ -89,7 +91,8 @@ uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms);
 void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
 
 // error.c
-void			error_exit(char *msg, int status);
+/* void			error_exit(char *msg, int status); */
+int				input_check(int argc, char **argv);
 
 // observer.c
 int				observer(t_main *main);

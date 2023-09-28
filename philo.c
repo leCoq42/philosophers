@@ -2,7 +2,7 @@
 
 static void	*philo_func(void *arg);
 
-void	philo_run(t_main *main)
+int	create_threads(t_main *main)
 {
 	uint_fast8_t	i;
 
@@ -11,11 +11,12 @@ void	philo_run(t_main *main)
 	while (i < main->config.num_philos)
 	{
 		if (pthread_create(&main->philos[i].thread, NULL, philo_func, &main->philos[i]) != 0)
-			error_exit("pthread_create error\n", 1);
+			return (join_threads(main, i), 1);
 		i++;
 	}
 	timestamp_ms(&main->start_time);
 	pthread_mutex_unlock(&main->start_lock);
+	return (0);
 }
 
 static void	*philo_func(void *arg)
@@ -24,7 +25,7 @@ static void	*philo_func(void *arg)
 	uint_fast8_t	forks[2];
 
 	philo = (t_philo *)arg;
-	timestamp_ms(&philo->timestamp);
+	timestamp_ms(&philo->last_meal_ms);
 	forks[RIGHT] = philo->id - 1;
 	forks[LEFT] = philo->id % philo->main->config.num_philos;
 	pthread_mutex_lock(&philo->main->start_lock);
@@ -74,9 +75,9 @@ int	check_print(t_philo *philo, char *action)
 		pthread_mutex_unlock(&philo->main->obs_lock);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->main->obs_lock);
 	pthread_mutex_lock(&philo->main->print_lock);
 	printf(FORMAT, time_elapsed_ms(philo->main->start_time), philo->id, action);
 	pthread_mutex_unlock(&philo->main->print_lock);
+	pthread_mutex_unlock(&philo->main->obs_lock);
 	return (0);
 }

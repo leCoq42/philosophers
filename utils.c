@@ -2,13 +2,15 @@
 
 static void	ph_putchar_fd(char c, int fd);
 
-int	ph_atoi(const char *str)
+long long	ph_atoi(const char *str)
 {
-	int	val;
+	long long	val;
 	int	sign;
 
 	val = 0;
 	sign = 1;
+	if (!str)
+		return (0);
 	while ((*str >= 9 && *str <= 13) || *str == 32)
 		str++;
 	if (*str == '-')

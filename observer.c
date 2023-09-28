@@ -12,7 +12,7 @@ int	observer(t_main *main)
 	while (1)
 	{
 		pthread_mutex_lock(&main->obs_lock);
-		last_meal_ms = time_elapsed_ms(main->philos[idx].timestamp);
+		last_meal_ms = time_elapsed_ms(main->philos[idx].last_meal_ms);
 		if (main->philos_done >= num_philos)
 		{
 			main->stop = 1;
@@ -22,8 +22,6 @@ int	observer(t_main *main)
 			pthread_mutex_unlock(&main->obs_lock);
 			return (1);
 		}
-		pthread_mutex_unlock(&main->obs_lock);
-		pthread_mutex_lock(&main->obs_lock);
 		if (last_meal_ms > time_to_die_ms && main->philos[idx].state != DONE)
 		{
 			main->stop = 1;
