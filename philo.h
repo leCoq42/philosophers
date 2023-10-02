@@ -22,9 +22,9 @@
 # define LEFT 1
 
 # ifdef PRETTY_PRINT
-# define FORMAT "timer:%8ldms, philo %3zu %s"
+# define FORMAT "timer:%8ldms, philo %u %s"
 # else
-# define FORMAT "%ld %zu %s"
+# define FORMAT "%ld %u %s"
 # endif
 
 enum	e_philo_state
@@ -45,20 +45,20 @@ typedef struct s_config
 
 typedef struct s_main
 {
-	t_config			config;
-	uint_fast64_t		start_time;
-	struct s_philo		*philos;
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		start_lock;
-	pthread_mutex_t		print_lock;
-	pthread_mutex_t		obs_lock;
-	uint_fast8_t		philos_done;
-	int					stop;
+	t_config		config;
+	uint_fast64_t	start_time;
+	struct s_philo	*philos;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	start_lock;
+	pthread_mutex_t	print_lock;
+	pthread_mutex_t	obs_lock;
+	uint_fast8_t	philos_done;
+	int				stop;
 }	t_main;
 
 typedef struct s_philo
 {
-	size_t				id;
+	uint_fast8_t		id;
 	enum e_philo_state	state;
 	uint_fast64_t		last_meal_ms;
 	pthread_t			thread;
@@ -72,11 +72,11 @@ t_main			*init_main(int argc, char **argv);
 // free.c
 void			free_all(t_main *main);
 void			join_threads(t_main *main, uint_fast8_t num);
-void	destroy_mutexes(t_main *main, uint_fast8_t num);
+void			destroy_mutexes(t_main *main, uint_fast8_t num);
 
 // philo.c
 int				create_threads(t_main *main);
-void			routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal);
+void			routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, uint8_t uneven);
 int				check_print(t_philo *philo, char *action);
 
 // utils.c
@@ -86,7 +86,7 @@ void			ph_putstr_fd(const char *s, int fd);
 void			*ph_calloc(size_t count, uint_fast32_t size);
 
 // time.c
-void			timestamp_ms(uint_fast64_t *start_time_ms);
+uint_fast64_t	timestamp_ms(void);
 uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms);
 void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
 
@@ -100,6 +100,6 @@ int				observer(t_main *main);
 // actions.c
 int				grab_forks(t_philo *philo, uint_fast8_t *forks);
 int				eating(t_philo *philo, uint_fast8_t *forks);
-int				sleeping(t_philo *philo, uint_fast8_t *forks);
+int				sleeping(t_philo *philo);
 
 #endif

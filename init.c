@@ -39,27 +39,9 @@ static int	init_config(t_main *main, int argc, char **argv)
 		config.num_times_to_eat = (uint_fast32_t)ph_atoi(argv[5]);
 	else
 		config.num_times_to_eat = 0;
-	/* if (check_config_params(config, argc) != 0) */
-	/* 	return (-1); */
 	main->config = config;
 	return (0);
 }
-
-/* static int	check_config_params(t_config config, int argc) */
-/* { */
-/* 	(void)argc; */
-/* 	if (config.num_philos < 1) */
-/* 		return (-1); */
-/* 	if (config.time_to_die_ms < 1) */
-/* 		return (-1); */
-/* 	if (config.time_to_eat_ms < 1) */
-/* 		return (-1); */
-/* 	if (config.time_to_sleep_ms < 1) */
-/* 		return (-1); */
-/* 	if (argc == 6 && config.num_times_to_eat < 0) */
-/* 		return (-1); */
-/* 	return (0); */
-/* } */
 
 static int	init_philos(t_main *main)
 {

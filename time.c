@@ -1,11 +1,14 @@
 #include "philo.h"
+#include <stdint.h>
 
-void	timestamp_ms(uint_fast64_t *start_time_ms)
+uint_fast64_t	timestamp_ms(void)
 {
 	struct timeval	time;
+	uint_fast64_t	timestamp;
 
 	gettimeofday(&time, NULL);
-	*start_time_ms = time.tv_sec * 1000 + time.tv_usec / 1000;
+	timestamp = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (timestamp);
 }
 
 uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms)
@@ -23,12 +26,12 @@ void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
 	uint_fast64_t	start_time_ms;
 	uint_fast32_t	elapsed_ms;
 
-	timestamp_ms(&start_time_ms);
+	start_time_ms = timestamp_ms();
 	while (1)
 	{
 		elapsed_ms = time_elapsed_ms(start_time_ms);
 		if (elapsed_ms >= sleeptime_ms)
 			return ;
-		usleep(250);
+		usleep(50);
 	}
 }
