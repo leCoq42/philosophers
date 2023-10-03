@@ -24,14 +24,8 @@ uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms)
 void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
 {
 	uint_fast64_t	start_time_ms;
-	uint_fast32_t	elapsed_ms;
 
 	start_time_ms = timestamp_ms();
-	while (1)
-	{
-		elapsed_ms = time_elapsed_ms(start_time_ms);
-		if (elapsed_ms >= sleeptime_ms)
-			return ;
-		usleep(50);
-	}
+	while (timestamp_ms() - start_time_ms < sleeptime_ms)
+		usleep(250);
 }

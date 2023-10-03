@@ -28,7 +28,7 @@ int	eating(t_philo *philo, uint8_t *forks)
 		pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
 		return (1);
 	}
-	timestamp_ms(&timestamp);
+	timestamp = timestamp_ms();
 	pthread_mutex_lock(&philo->main->obs_lock);
 	philo->last_meal_ms = timestamp;
 	pthread_mutex_unlock(&philo->main->obs_lock);

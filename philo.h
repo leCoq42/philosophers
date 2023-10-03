@@ -76,7 +76,7 @@ void			destroy_mutexes(t_main *main, uint_fast8_t num);
 
 // philo.c
 int				create_threads(t_main *main);
-void			routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, uint8_t uneven);
+int				routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, uint8_t uneven);
 int				check_print(t_philo *philo, char *action);
 
 // utils.c
