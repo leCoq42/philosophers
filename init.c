@@ -3,7 +3,6 @@
 static int	init_config(t_main *main, int argc, char **argv);
 static int	init_philos(t_main *main);
 static int	init_forks(t_main *main);
-/* static int	check_config_params(t_config config, int argc); */
 
 t_main	*init_main(int argc, char **argv)
 {
@@ -14,9 +13,9 @@ t_main	*init_main(int argc, char **argv)
 		return (NULL);
 	memset(main, 0, sizeof(t_main));
 	main->philos_done = 0;
-	main->stop = 0;
 	pthread_mutex_init(&main->print_lock, NULL);
-	pthread_mutex_init(&main->obs_lock, NULL);
+	pthread_mutex_init(&main->stop_lock, NULL);
+	pthread_mutex_init(&main->done_lock, NULL);
 	pthread_mutex_init(&main->start_lock, NULL);
 	if (init_config(main, argc, argv) != 0)
 		return (free(main), NULL);
@@ -54,6 +53,7 @@ static int	init_philos(t_main *main)
 	memset(main->philos, 0, sizeof(t_philo) * (main->config.num_philos));
 	while (idx < main->config.num_philos)
 	{
+		pthread_mutex_init(&main->philos[idx].philo_lock, NULL);
 		main->philos[idx].main = main;
 		main->philos[idx].id = idx + 1;
 		main->philos[idx].state = ALIVE;

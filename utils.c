@@ -5,7 +5,7 @@ static void	ph_putchar_fd(char c, int fd);
 long long	ph_atoi(const char *str)
 {
 	long long	val;
-	int	sign;
+	int			sign;
 
 	val = 0;
 	sign = 1;

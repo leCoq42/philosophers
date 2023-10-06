@@ -1,5 +1,4 @@
 #include "philo.h"
-#include <stdint.h>
 
 uint_fast64_t	timestamp_ms(void)
 {
@@ -11,21 +10,19 @@ uint_fast64_t	timestamp_ms(void)
 	return (timestamp);
 }
 
-uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms)
+uint_fast64_t	time_diff_ms(uint_fast64_t start_ms, uint_fast64_t cur_ms)
 {
-	struct timeval	cur;
-	uint_fast32_t	passed;
+	const uint_fast64_t	diff = cur_ms - start_ms;
 
-	gettimeofday(&cur, NULL);
-	passed = (cur.tv_sec * 1000 + cur.tv_usec / 1000) - start_time_ms;
-	return (passed);
+	return (diff);
 }
 
 void	ph_sleep_ms(uint_fast32_t sleeptime_ms)
 {
-	uint_fast64_t	start_time_ms;
+	const uint_fast64_t	start_time_ms = timestamp_ms();
+	const uint_fast64_t	sleep_us = sleeptime_ms * 800;
 
-	start_time_ms = timestamp_ms();
-	while (timestamp_ms() - start_time_ms < sleeptime_ms)
-		usleep(250);
+	usleep(sleep_us);
+	while (timestamp_ms() < start_time_ms + sleeptime_ms)
+		usleep(100);
 }

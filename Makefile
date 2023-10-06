@@ -19,7 +19,6 @@ ifdef DEBUG
 endif
 
 ifdef FSAN
-	# CFLAGS += -fsanitize=address,undefined
 	CFLAGS += -fsanitize=thread
 endif
 

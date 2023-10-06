@@ -30,9 +30,11 @@ void	destroy_mutexes(t_main *main, uint_fast8_t num)
 	while (idx < num)
 	{
 		pthread_mutex_destroy(&main->forks[idx]);
+		pthread_mutex_destroy(&main->philos[idx].philo_lock);
 		idx++;
 	}
 	pthread_mutex_destroy(&main->start_lock);
 	pthread_mutex_destroy(&main->print_lock);
-	pthread_mutex_destroy(&main->obs_lock);
+	pthread_mutex_destroy(&main->stop_lock);
+	pthread_mutex_destroy(&main->done_lock);
 }

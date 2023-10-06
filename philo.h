@@ -10,8 +10,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <limits.h>
+# include <stdbool.h>
 
-# define USAGE "Error: Usage: ./philo num_philos time_to_die time_to_eat time_to_sleep [num_times_to_eat]\n"
 # define GRAB "has taken a fork\n"
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
@@ -22,9 +22,9 @@
 # define LEFT 1
 
 # ifdef PRETTY_PRINT
-# define FORMAT "timer:%8ldms, philo %u %s"
+#  define FORMAT "timer:%8ldms, philo %u %s"
 # else
-# define FORMAT "%ld %u %s"
+#  define FORMAT "%ld %u %s"
 # endif
 
 enum	e_philo_state
@@ -51,9 +51,10 @@ typedef struct s_main
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	start_lock;
 	pthread_mutex_t	print_lock;
-	pthread_mutex_t	obs_lock;
+	pthread_mutex_t	stop_lock;
+	pthread_mutex_t	done_lock;
 	uint_fast8_t	philos_done;
-	int				stop;
+	bool			stop;
 }	t_main;
 
 typedef struct s_philo
@@ -62,6 +63,7 @@ typedef struct s_philo
 	enum e_philo_state	state;
 	uint_fast64_t		last_meal_ms;
 	pthread_t			thread;
+	pthread_mutex_t		philo_lock;
 	t_main				*main;
 }	t_philo;
 
@@ -76,7 +78,8 @@ void			destroy_mutexes(t_main *main, uint_fast8_t num);
 
 // philo.c
 int				create_threads(t_main *main);
-int				routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, uint8_t uneven);
+int				routine_loop(t_philo *philo, uint_fast8_t *forks, \
+					uint_fast32_t goal, uint8_t uneven);
 int				check_print(t_philo *philo, char *action);
 
 // utils.c
@@ -87,7 +90,7 @@ void			*ph_calloc(size_t count, uint_fast32_t size);
 
 // time.c
 uint_fast64_t	timestamp_ms(void);
-uint_fast32_t	time_elapsed_ms(uint_fast64_t start_time_ms);
+uint_fast64_t	time_diff_ms(uint_fast64_t start_ms, uint_fast64_t cur_ms);
 void			ph_sleep_ms(uint_fast32_t sleeptime_ms);
 
 // error.c

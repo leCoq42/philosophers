@@ -6,7 +6,8 @@ int	main(int argc, char **argv)
 
 	if (argc != 5 && argc != 6)
 	{
-		ph_putstr_fd("Error: Usage: ./philo num_philos time_to_die time_to_eat time_to_sleep [num_times_to_eat]\n", 1);
+		ph_putstr_fd("Error: Usage: ./philo num_philos time_to_die ", 1);
+		ph_putstr_fd("time_to_eat time_to_sleep [num_times_to_eat]\n", 1);
 		return (1);
 	}
 	if (input_check(argc, argv))
