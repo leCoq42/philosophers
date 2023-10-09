@@ -60,7 +60,7 @@ void	ph_putstr_fd(const char *s, int fd)
 			return ;
 }
 
-void	*ph_calloc(size_t count, uint_fast32_t size)
+void	*ph_calloc(size_t count, uint32_t size)
 {
 	void			*mem;
 	unsigned char	*ptr;

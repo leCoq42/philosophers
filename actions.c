@@ -20,7 +20,7 @@ int	grab_forks(t_philo *philo, uint8_t *forks)
 
 int	eating(t_philo *philo, uint8_t *forks)
 {
-	uint_fast64_t	timestamp;
+	uint64_t	timestamp;
 
 	if (check_print(philo, EAT) == 1)
 	{

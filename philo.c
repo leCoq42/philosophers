@@ -7,7 +7,7 @@ static void	set_done(t_philo *philo);
 
 int	create_threads(t_main *main)
 {
-	uint_fast8_t	i;
+	uint8_t	i;
 
 	i = 0;
 	pthread_mutex_lock(&main->start_lock);
@@ -37,6 +37,7 @@ static void	*philo_func(void *arg)
 	forks[RIGHT] = philo->id - 1;
 	forks[LEFT] = philo->id % philo->main->config.num_philos;
 	pthread_mutex_lock(&philo->main->start_lock);
+	/* printf("philo %d, uneven %d,  fork right: %d, fork left: %d\n", philo->id, uneven, forks[RIGHT], forks[LEFT]); */
 	pthread_mutex_unlock(&philo->main->start_lock);
 	if (routine_loop(philo, forks, philo->main->config.num_times_to_eat, \
 				uneven) == 0)
@@ -44,13 +45,13 @@ static void	*philo_func(void *arg)
 	return (NULL);
 }
 
-int	routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal, \
+int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 				uint8_t uneven)
 {
-	uint_fast32_t	i;
+	uint32_t	i;
 
 	i = 0;
-	if (uneven)
+	if (!uneven)
 	{
 		check_print(philo, THINK);
 		ph_sleep_ms(philo->main->config.time_to_eat_ms / 2);
@@ -65,15 +66,15 @@ int	routine_loop(t_philo *philo, uint_fast8_t *forks, uint_fast32_t goal, \
 			return (0);
 		if (sleeping(philo) == 1)
 			return (1);
-		if (i == UINT_FAST32_MAX)
+		if (i == UINT32_MAX)
 			i = 0;
 	}
 }
 
 static void	set_done(t_philo *philo)
 {
-	uint_fast64_t	elapsed;
-	const uint_fast8_t	num_philos = philo->main->config.num_philos;
+	uint64_t		elapsed;
+	const uint8_t	num_philos = philo->main->config.num_philos;
 
 	pthread_mutex_lock(&philo->main->done_lock);
 	philo->state = DONE;
@@ -101,8 +102,8 @@ static void	set_done(t_philo *philo)
 
 int	check_print(t_philo *philo, char *action)
 {
-	bool			stop;
-	uint_fast64_t	elapsed;
+	bool		stop;
+	uint64_t	elapsed;
 
 	pthread_mutex_lock(&philo->main->stop_lock);
 	stop = philo->main->stop;
@@ -114,6 +115,7 @@ int	check_print(t_philo *philo, char *action)
 		pthread_mutex_unlock(&philo->main->print_lock);
 		return (1);
 	}
+	/* printf("%ld  ", time_diff_ms(philo->last_meal_ms, timestamp_ms())); */
 	printf(FORMAT, elapsed, philo->id, action);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	return (0);

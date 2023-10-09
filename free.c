@@ -10,9 +10,9 @@ void	free_all(t_main *main)
 		free(main);
 }
 
-void	join_threads(t_main *main, uint_fast8_t num)
+void	join_threads(t_main *main, uint8_t num)
 {
-	uint_fast8_t	idx;
+	uint8_t	idx;
 
 	idx = 0;
 	while (idx < num)
@@ -22,9 +22,9 @@ void	join_threads(t_main *main, uint_fast8_t num)
 	}
 }
 
-void	destroy_mutexes(t_main *main, uint_fast8_t num)
+void	destroy_mutexes(t_main *main, uint8_t num)
 {
-	uint_fast8_t	idx;
+	uint8_t	idx;
 
 	idx = 0;
 	while (idx < num)

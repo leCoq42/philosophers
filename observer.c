@@ -1,13 +1,13 @@
 #include "philo.h"
 
-static int	check_death(t_main *main, uint_fast8_t idx, uint_fast32_t ttd_ms);
+static int	check_death(t_main *main, uint8_t idx, uint32_t ttd_ms);
 
 int	observer(t_main *main)
 {
-	uint_fast8_t		idx;
-	const uint_fast8_t	num_philos = main->config.num_philos;
-	const uint_fast32_t	time_to_die_ms = main->config.time_to_die_ms;
-	bool				stop;
+	uint8_t			idx;
+	const uint8_t	num_philos = main->config.num_philos;
+	const uint32_t	time_to_die_ms = main->config.time_to_die_ms;
+	bool			stop;
 
 	idx = 0;
 	while (1)
@@ -23,16 +23,16 @@ int	observer(t_main *main)
 		if (idx == num_philos)
 		{
 			idx = 0;
-			ph_sleep_ms(10);
+			usleep(50);
 		}
 	}
 }
 
-static int	check_death(t_main *main, uint_fast8_t idx, uint_fast32_t ttd_ms)
+static int	check_death(t_main *main, uint8_t idx, uint32_t ttd_ms)
 {
-	uint_fast64_t	elapsed;
-	uint_fast32_t	last_meal_ms;
-	int				state;
+	uint64_t	elapsed;
+	uint64_t	last_meal_ms;
+	int			state;
 
 	pthread_mutex_lock(&main->philos[idx].philo_lock);
 	last_meal_ms = main->philos[idx].last_meal_ms;
