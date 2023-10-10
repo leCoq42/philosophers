@@ -3,7 +3,7 @@
 
 int	input_check(int argc, char **argv)
 {
-	if (ph_atoi(argv[1]) < 2 || ph_atoi(argv[1]) > 199)
+	if (ph_atoi(argv[1]) < 2 || ph_atoi(argv[1]) > 200)
 		return (1);
 	if (ph_atoi(argv[2]) < 60 || ph_atoi(argv[2]) > UINT32_MAX)
 		return (1);

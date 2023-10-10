@@ -1,11 +1,12 @@
 #include "philo.h"
+#include <stdint.h>
 
 static void	*philo_func(void *arg);
 static void	set_done(t_philo *philo);
 
 int	create_threads(t_main *main)
 {
-	uint8_t	i;
+	uint_fast8_t	i;
 
 	i = 0;
 	pthread_mutex_lock(&main->start_lock);
@@ -48,7 +49,7 @@ static void	*philo_func(void *arg)
 int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 				uint8_t uneven)
 {
-	uint32_t	i;
+	uint_fast32_t	i;
 
 	i = 0;
 	if (uneven)
@@ -102,8 +103,8 @@ static void	set_done(t_philo *philo)
 
 int	check_print(t_philo *philo, char *action)
 {
-	int			state;
-	uint64_t	elapsed;
+	uint8_t			state;
+	uint_fast64_t	elapsed;
 
 	pthread_mutex_lock(&philo->main->print_lock);
 	pthread_mutex_lock(&philo->philo_lock);

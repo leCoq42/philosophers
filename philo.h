@@ -46,7 +46,7 @@ typedef struct s_config
 typedef struct s_main
 {
 	t_config		config;
-	uint64_t		start_time;
+	uint_fast64_t		start_time;
 	struct s_philo	*philos;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	start_lock;
@@ -60,7 +60,7 @@ typedef struct s_philo
 {
 	uint8_t				id;
 	enum e_philo_state	state;
-	uint64_t			last_meal_ms;
+	uint_fast64_t			last_meal_ms;
 	pthread_t			thread;
 	pthread_mutex_t		philo_lock;
 	t_main				*main;
@@ -88,7 +88,7 @@ void		ph_putstr_fd(const char *s, int fd);
 void		*ph_calloc(size_t count, uint32_t size);
 
 // time.c
-uint64_t	timestamp_ms(void);
+uint_fast64_t	timestamp_ms(void);
 uint64_t	time_diff_ms(uint64_t start_ms, uint64_t cur_ms);
 void		ph_sleep_ms(uint32_t sleeptime_ms);
 
