@@ -23,7 +23,7 @@ int	observer(t_main *main)
 		if (idx == num_philos)
 		{
 			idx = 0;
-			usleep(50);
+			usleep(10);
 		}
 	}
 }
@@ -40,14 +40,27 @@ static int	check_death(t_main *main, uint8_t idx, uint32_t ttd_ms)
 	pthread_mutex_unlock(&main->philos[idx].philo_lock);
 	if (time_diff_ms(last_meal_ms, timestamp_ms()) > ttd_ms && state != DONE)
 	{
-		pthread_mutex_lock(&main->stop_lock);
-		main->stop = true;
-		pthread_mutex_unlock(&main->stop_lock);
-		elapsed = time_diff_ms(main->start_time, timestamp_ms());
 		pthread_mutex_lock(&main->print_lock);
+		set_finish(main);
+		usleep(1000);
+		elapsed = time_diff_ms(main->start_time, timestamp_ms());
 		printf(FORMAT, elapsed, idx + 1, DIED);
 		pthread_mutex_unlock(&main->print_lock);
 		return (1);
 	}
 	return (0);
+}
+
+void	set_finish(t_main *main)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (idx < main->config.num_philos)
+	{
+		pthread_mutex_lock(&main->philos[idx].philo_lock);
+		main->philos[idx].state = DONE;
+		pthread_mutex_unlock(&main->philos[idx].philo_lock);
+		idx++;
+	}
 }

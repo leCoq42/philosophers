@@ -1,11 +1,12 @@
 #include "philo.h"
+#include <stdint.h>
 
 static void	ph_putchar_fd(char c, int fd);
 
-long long	ph_atoi(const char *str)
+int64_t	ph_atoi(const char *str)
 {
-	long long	val;
-	int			sign;
+	int64_t	val;
+	int		sign;
 
 	val = 0;
 	sign = 1;

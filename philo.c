@@ -1,6 +1,4 @@
 #include "philo.h"
-#include <pthread.h>
-#include <stdint.h>
 
 static void	*philo_func(void *arg);
 static void	set_done(t_philo *philo);
@@ -15,7 +13,10 @@ int	create_threads(t_main *main)
 	{
 		if (pthread_create(&main->philos[i].thread, NULL, philo_func, \
 					&main->philos[i]) != 0)
+		{
+			pthread_mutex_unlock(&main->start_lock);
 			return (join_threads(main, i), 1);
+		}
 		i++;
 	}
 	main->start_time = timestamp_ms();
@@ -37,7 +38,6 @@ static void	*philo_func(void *arg)
 	forks[RIGHT] = philo->id - 1;
 	forks[LEFT] = philo->id % philo->main->config.num_philos;
 	pthread_mutex_lock(&philo->main->start_lock);
-	/* printf("philo %d, uneven %d,  fork right: %d, fork left: %d\n", philo->id, uneven, forks[RIGHT], forks[LEFT]); */
 	pthread_mutex_unlock(&philo->main->start_lock);
 	if (routine_loop(philo, forks, philo->main->config.num_times_to_eat, \
 				uneven) == 0)
@@ -51,7 +51,7 @@ int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 	uint32_t	i;
 
 	i = 0;
-	if (!uneven)
+	if (uneven)
 	{
 		check_print(philo, THINK);
 		ph_sleep_ms(philo->main->config.time_to_eat_ms / 2);
@@ -73,49 +73,48 @@ int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 
 static void	set_done(t_philo *philo)
 {
-	uint64_t		elapsed;
 	const uint8_t	num_philos = philo->main->config.num_philos;
 
-	pthread_mutex_lock(&philo->main->done_lock);
-	philo->state = DONE;
+	pthread_mutex_lock(&philo->main->stop_lock);
 	if (++philo->main->philos_done >= num_philos)
 	{
-		pthread_mutex_unlock(&philo->main->done_lock);
-		pthread_mutex_lock(&philo->main->stop_lock);
 		philo->main->stop = 1;
 		pthread_mutex_unlock(&philo->main->stop_lock);
-		elapsed = time_diff_ms(philo->main->start_time, timestamp_ms());
+		set_finish(philo->main);
+		usleep(1000);
 		pthread_mutex_lock(&philo->main->print_lock);
-		printf(FORMAT, elapsed, philo->id, SLEEP);
-		printf("All philosophers done eating.\n");
+		printf(FORMAT, time_diff_ms(philo->main->start_time, timestamp_ms()), \
+				philo->id, SLEEP);
 		pthread_mutex_unlock(&philo->main->print_lock);
 	}
 	else
 	{
-		pthread_mutex_unlock(&philo->main->done_lock);
-		elapsed = time_diff_ms(philo->main->start_time, timestamp_ms());
+		pthread_mutex_unlock(&philo->main->stop_lock);
+		pthread_mutex_lock(&philo->philo_lock);
+		philo->state = DONE;
+		pthread_mutex_unlock(&philo->philo_lock);
 		pthread_mutex_lock(&philo->main->print_lock);
-		printf(FORMAT, elapsed, philo->id, SLEEP);
+		printf(FORMAT, time_diff_ms(philo->main->start_time, timestamp_ms()), \
+				philo->id, SLEEP);
 		pthread_mutex_unlock(&philo->main->print_lock);
 	}
 }
 
 int	check_print(t_philo *philo, char *action)
 {
-	bool		stop;
+	int			state;
 	uint64_t	elapsed;
 
-	pthread_mutex_lock(&philo->main->stop_lock);
-	stop = philo->main->stop;
-	pthread_mutex_unlock(&philo->main->stop_lock);
-	elapsed = time_diff_ms(philo->main->start_time, timestamp_ms());
 	pthread_mutex_lock(&philo->main->print_lock);
-	if (stop)
+	pthread_mutex_lock(&philo->philo_lock);
+	state = philo->state;
+	pthread_mutex_unlock(&philo->philo_lock);
+	if (state == DONE)
 	{
 		pthread_mutex_unlock(&philo->main->print_lock);
 		return (1);
 	}
-	/* printf("%ld  ", time_diff_ms(philo->last_meal_ms, timestamp_ms())); */
+	elapsed = time_diff_ms(philo->main->start_time, timestamp_ms());
 	printf(FORMAT, elapsed, philo->id, action);
 	pthread_mutex_unlock(&philo->main->print_lock);
 	return (0);

@@ -20,6 +20,7 @@ endif
 
 ifdef FSAN
 	CFLAGS += -fsanitize=thread
+	# CFLAGS += -fsanitize=address,undefined
 endif
 
 #=================== GENERAL VARIABLES ===================#

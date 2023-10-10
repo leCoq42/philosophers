@@ -15,7 +15,6 @@ t_main	*init_main(int argc, char **argv)
 	main->philos_done = 0;
 	pthread_mutex_init(&main->print_lock, NULL);
 	pthread_mutex_init(&main->stop_lock, NULL);
-	pthread_mutex_init(&main->done_lock, NULL);
 	pthread_mutex_init(&main->start_lock, NULL);
 	if (init_config(main, argc, argv) != 0)
 		return (free(main), NULL);

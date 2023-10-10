@@ -36,5 +36,4 @@ void	destroy_mutexes(t_main *main, uint8_t num)
 	pthread_mutex_destroy(&main->start_lock);
 	pthread_mutex_destroy(&main->print_lock);
 	pthread_mutex_destroy(&main->stop_lock);
-	pthread_mutex_destroy(&main->done_lock);
 }
