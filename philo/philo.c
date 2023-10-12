@@ -6,7 +6,7 @@
 /*   By: mhaan <mhaan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:42:53 by mhaan             #+#    #+#             */
-/*   Updated: 2023/10/12 10:42:56 by mhaan            ###   ########.fr       */
+/*   Updated: 12/10/2023 03:23:40 PM mhaan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 	if (uneven)
 	{
 		check_print(philo, THINK);
-		ph_sleep_ms(philo->main->config.time_to_eat_ms / 2);
+		if (ph_sleep_ms(philo->main->config.tt_eat_ms / 2, philo->main) == 1)
+			return (1);
 	}
 	while (1)
 	{

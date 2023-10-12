@@ -42,9 +42,9 @@ static int	init_config(t_main *main, int argc, char **argv)
 	t_config	config;
 
 	config.num_philos = (uint8_t)ph_atoi(argv[1]);
-	config.time_to_die_ms = (uint32_t)ph_atoi(argv[2]);
-	config.time_to_eat_ms = (uint32_t)ph_atoi(argv[3]);
-	config.time_to_sleep_ms = (uint32_t)ph_atoi(argv[4]);
+	config.tt_die_ms = (uint32_t)ph_atoi(argv[2]);
+	config.tt_eat_ms = (uint32_t)ph_atoi(argv[3]);
+	config.tt_sleep_ms = (uint32_t)ph_atoi(argv[4]);
 	if (argc == 6)
 		config.num_times_to_eat = (uint32_t)ph_atoi(argv[5]);
 	else

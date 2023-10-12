@@ -18,7 +18,7 @@ int	observer(t_main *main)
 {
 	uint_fast8_t	idx;
 	const uint8_t	num_philos = main->config.num_philos;
-	const uint32_t	time_to_die_ms = main->config.time_to_die_ms;
+	const uint32_t	time_to_die_ms = main->config.tt_die_ms;
 	bool			stop;
 
 	idx = 0;

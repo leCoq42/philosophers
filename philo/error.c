@@ -27,12 +27,6 @@ int	input_check(int argc, char **argv)
 		if (ph_atoi(argv[5]) < 1 || ph_atoi(argv[5]) > UINT32_MAX)
 			return (1);
 	}
-	if (ph_atoi(argv[3]) > ph_atoi(argv[2]))
-		return (1);
-	if (ph_atoi(argv[4]) > ph_atoi(argv[2]))
-		return (1);
-	if (ph_atoi(argv[3]) + ph_atoi(argv[4]) > ph_atoi(argv[2]))
-		return (1);
 	return (0);
 }
 

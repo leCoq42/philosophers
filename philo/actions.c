@@ -6,7 +6,7 @@
 /*   By: mhaan <mhaan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:42:03 by mhaan             #+#    #+#             */
-/*   Updated: 2023/10/12 12:39:13 by mhaan            ###   ########.fr       */
+/*   Updated: 12/10/2023 03:11:23 PM mhaan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	eating(t_philo *philo, uint8_t *forks)
 	pthread_mutex_lock(&philo->philo_lock);
 	philo->last_meal_ms = timestamp;
 	pthread_mutex_unlock(&philo->philo_lock);
-	ph_sleep_ms(philo->main->config.time_to_eat_ms);
+	if (ph_sleep_ms(philo->main->config.tt_eat_ms, philo->main) == 1)
+		return (1);
 	pthread_mutex_unlock(&philo->main->forks[forks[LEFT]]);
 	pthread_mutex_unlock(&philo->main->forks[forks[RIGHT]]);
 	return (0);
@@ -54,7 +55,8 @@ int	sleeping(t_philo *philo)
 {
 	if (check_print(philo, SLEEP) == 1)
 		return (1);
-	ph_sleep_ms(philo->main->config.time_to_sleep_ms);
+	if (ph_sleep_ms(philo->main->config.tt_sleep_ms, philo->main) == 1)
+		return (1);
 	if (check_print(philo, THINK) == 1)
 		return (1);
 	return (0);

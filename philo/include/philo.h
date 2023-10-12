@@ -6,7 +6,7 @@
 /*   By: mhaan <mhaan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:43:35 by mhaan             #+#    #+#             */
-/*   Updated: 2023/10/12 10:43:40 by mhaan            ###   ########.fr       */
+/*   Updated: 12/10/2023 03:20:34 PM mhaan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ enum	e_philo_state
 typedef struct s_config
 {
 	uint8_t		num_philos;
-	uint32_t	time_to_die_ms;
-	uint32_t	time_to_eat_ms;
-	uint32_t	time_to_sleep_ms;
+	uint32_t	tt_die_ms;
+	uint32_t	tt_eat_ms;
+	uint32_t	tt_sleep_ms;
 	uint32_t	num_times_to_eat;
 }	t_config;
 
@@ -102,7 +102,7 @@ void			*ph_calloc(size_t count, uint32_t size);
 // time.c
 uint_fast64_t	timestamp_ms(void);
 uint64_t		time_diff_ms(uint64_t start_ms, uint64_t cur_ms);
-void			ph_sleep_ms(uint32_t sleeptime_ms);
+int				ph_sleep_ms(uint32_t sleeptime_ms, t_main *main);
 
 // error.c
 int				input_check(int argc, char **argv);
