@@ -74,6 +74,7 @@ t_main			*init_structs(int argc, char **argv);
 void			free_all(t_main *main);
 void			join_threads(t_main *main, uint8_t num);
 void			destroy_mutexes(t_main *main, uint8_t num);
+void			end_program(t_main *main);
 
 // philo.c
 int				create_threads(t_main *main);
@@ -93,6 +94,7 @@ void			ph_sleep_ms(uint32_t sleeptime_ms);
 
 // error.c
 int				input_check(int argc, char **argv);
+void			print_usage_error(void);
 
 // observer.c
 int				observer(t_main *main);

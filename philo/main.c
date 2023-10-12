@@ -1,31 +1,31 @@
 #include "philo.h"
 
+static void	print_one_philo(t_main *main);
+
 int	main(int argc, char **argv)
 {
 	t_main	*main;
 
 	if (argc != 5 && argc != 6)
-	{
-		ph_putstr_fd("Error: Usage: ./philo num_philos time_to_die ", 1);
-		ph_putstr_fd("time_to_eat time_to_sleep [num_times_to_eat]\n", 1);
-		return (1);
-	}
+		return (print_usage_error(), 1);
 	if (input_check(argc, argv))
-	{
-		ph_putstr_fd("Invalid Input!\n", 1);
-		return (1);
-	}
+		return (ph_putstr_fd("Invalid Input!\n", 1), 1);
 	main = init_structs(argc, argv);
 	if (!main)
+		return (ph_putstr_fd("Init error!\n", 2), free_all(main), 1);
+	if (main->config.num_philos == 1)
+		print_one_philo(main);
+	else
 	{
-		ph_putstr_fd("Init error!\n", 2);
-		return (free_all(main), 1);
+		if (create_threads(main) == 1)
+			return (free_all(main), 1);
+		observer(main);
 	}
-	if (create_threads(main) == 1)
-		return (free_all(main), 1);
-	observer(main);
-	join_threads(main, main->config.num_philos);
-	destroy_mutexes(main, main->config.num_philos);
-	free_all(main);
-	return (0);
+	end_program(main);
+}
+
+void	print_one_philo(t_main *main)
+{
+	printf("0 1 has taken a fork\n");
+	printf("%u 1 died\n", main->config.time_to_die_ms);
 }

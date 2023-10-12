@@ -81,7 +81,7 @@ static void	set_done(t_philo *philo)
 		philo->main->stop = 1;
 		pthread_mutex_unlock(&philo->main->stop_lock);
 		set_finish(philo->main);
-		usleep(1000);
+		usleep(4000);
 		pthread_mutex_lock(&philo->main->print_lock);
 		printf(FORMAT, time_diff_ms(philo->main->start_time, timestamp_ms()), \
 				philo->id, SLEEP);

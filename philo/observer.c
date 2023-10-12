@@ -38,7 +38,7 @@ static int	check_death(t_philo *philo, uint32_t ttd_ms)
 	{
 		pthread_mutex_unlock(&philo->philo_lock);
 		set_finish(philo->main);
-		usleep(1000);
+		usleep(4000);
 		pthread_mutex_lock(&philo->main->print_lock);
 		elapsed = time_diff_ms(philo->main->start_time, timestamp_ms());
 		printf(FORMAT, elapsed, philo->id, DIED);

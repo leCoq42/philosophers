@@ -1,5 +1,15 @@
 #include "philo.h"
 
+void	end_program(t_main *main)
+{
+	if (main->config.num_philos != 1)
+	{
+		join_threads(main, main->config.num_philos);
+		destroy_mutexes(main, main->config.num_philos);
+	}
+	free_all(main);
+}
+
 void	free_all(t_main *main)
 {
 	if (main && main->philos)
