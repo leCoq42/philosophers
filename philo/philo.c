@@ -1,5 +1,4 @@
 #include "philo.h"
-#include <stdint.h>
 
 static void	*philo_func(void *arg);
 static void	set_done(t_philo *philo);

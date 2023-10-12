@@ -4,7 +4,7 @@ static int	init_config(t_main *main, int argc, char **argv);
 static int	init_philos(t_main *main);
 static int	init_forks(t_main *main);
 
-t_main	*init_main(int argc, char **argv)
+t_main	*init_structs(int argc, char **argv)
 {
 	t_main	*main;
 

@@ -11,11 +11,14 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	if (input_check(argc, argv))
+	{
+		ph_putstr_fd("Invalid Input!\n", 1);
 		return (1);
-	main = init_main(argc, argv);
+	}
+	main = init_structs(argc, argv);
 	if (!main)
 	{
-		ph_putstr_fd("init error!\n", 2);
+		ph_putstr_fd("Init error!\n", 2);
 		return (free_all(main), 1);
 	}
 	if (create_threads(main) == 1)

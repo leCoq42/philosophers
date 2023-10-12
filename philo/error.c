@@ -1,5 +1,4 @@
 #include "philo.h"
-#include <stdint.h>
 
 int	input_check(int argc, char **argv)
 {

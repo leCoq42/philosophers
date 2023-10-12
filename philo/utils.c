@@ -1,7 +1,4 @@
 #include "philo.h"
-#include <stdint.h>
-
-static void	ph_putchar_fd(char c, int fd);
 
 int64_t	ph_atoi(const char *str)
 {
@@ -21,33 +18,6 @@ int64_t	ph_atoi(const char *str)
 	while (*str && *str > 47 && *str < 58)
 		val = val * 10 + (*str++ - 48);
 	return (val * sign);
-}
-
-void	ph_putnbr_fd(int n, int fd)
-{
-	if (fd < 0)
-		return ;
-	if (n == INT_MIN)
-	{
-		if (write(fd, "-2147483648", 11) == -1)
-			return ;
-		return ;
-	}
-	else if (n < 0)
-	{
-		if (write(fd, "-", 1) == -1)
-			return ;
-		n *= -1;
-	}
-	if (n / 10 != 0)
-		ph_putnbr_fd(n / 10, fd);
-	ph_putchar_fd(n % 10 + '0', fd);
-}
-
-static void	ph_putchar_fd(char c, int fd)
-{
-	if (write(fd, &c, 1) == -1)
-		return ;
 }
 
 void	ph_putstr_fd(const char *s, int fd)

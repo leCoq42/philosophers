@@ -1,5 +1,4 @@
 #include "philo.h"
-#include <stdint.h>
 
 static int	check_death(t_philo *philo, uint32_t ttd_ms);
 

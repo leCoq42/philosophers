@@ -4,7 +4,7 @@ NAME	:= philo
 #=================== DIRECTORIES ===================#
 OBJ_DIR	:=	./obj
 SRC_DIR	:=	.
-INC_DIR	:=  .
+INC_DIR	:=  ./include
 
 #=================== LIBRARIES ===================#
 
@@ -27,9 +27,7 @@ endif
 
 INCLUDE	:=	$(addprefix -I,$(INC_DIR))
 
-MAIN	:=	main.c
-
-SRC		:=	init.c utils.c free.c philo.c time.c error.c observer.c actions.c
+SRC		:=	main.c init.c utils.c free.c philo.c time.c error.c observer.c actions.c
 
 
 ODIR	:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))
@@ -42,46 +40,36 @@ OBJS	:=	$(SRC:%.c=$(OBJ_DIR)/%.o)
 #=================== RECIPES ===================#
 #===============================================#
 
-.PHONY: all
 all: $(ODIR) $(NAME)
 
-.PHONY: optim
 optim:
 	$(MAKE) OPTIM=1
 
-.PHONY: reoptim
 reoptim:
 	$(MAKE) fclean
 	$(MAKE) optim
 
-.PHONY: clean
 clean:
 	@rm -rf $(OBJ_DIR)
 
-.PHONY: fclean
 fclean:
 	@$(MAKE) clean
-	@rm -rf $(NAME)
+	@rm -f $(NAME)
 
-.PHONY: re
 re:
 	@$(MAKE) fclean
 	@$(MAKE) all
 
-.PHONY: debug
 debug:
 	@$(MAKE) DEBUG=1
 
-.PHONY: rebug
 rebug:
 	@$(MAKE) fclean
 	@$(MAKE) debug
 
-.PHONY: fsan
 fsan:
 	@$(MAKE) DEBUG=1 FSAN=1
 
-.PHONY: resan
 resan:
 	@$(MAKE) fclean
 	@$(MAKE) fsan
@@ -97,3 +85,5 @@ $(NAME): $(OBJS) $(MAIN_OBJ)
 
 $(ODIR):
 	mkdir -p $@
+
+.PHONY: all, optim, reoptim, clean, fclean, re, debug, rebug, fsan, resan
