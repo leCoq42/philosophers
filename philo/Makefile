@@ -8,11 +8,7 @@ INC_DIR	:=  ./include
 
 #=================== LIBRARIES ===================#
 
-CFLAGS	:=	-Wextra -Wall -Werror -pthread
-
-ifdef OPTIM
-	CFLAGS += -Ofast -flto -march=native
-endif
+CFLAGS	:=	-Wextra -Wall -Werror -pthread -Ofast -flto -march=native
 
 ifdef DEBUG
 	CFLAGS += -g -Og
@@ -29,12 +25,10 @@ INCLUDE	:=	$(addprefix -I,$(INC_DIR))
 
 SRC		:=	main.c init.c utils.c free.c philo.c time.c error.c observer.c actions.c
 
-
 ODIR	:=	$(sort $(dir $(SRC:%=$(OBJ_DIR)/%)))
 
 MAIN_OBJ:=	$(MAIN:%.c=$(OBJ_DIR)/%.o)
 OBJS	:=	$(SRC:%.c=$(OBJ_DIR)/%.o)
-
 
 #===============================================#
 #=================== RECIPES ===================#
