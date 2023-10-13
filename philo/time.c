@@ -36,6 +36,8 @@ int	ph_sleep_ms(uint32_t sleeptime_ms, t_main *main)
 	const uint_fast32_t	ttd = main->config.tt_die_ms;
 	uint_fast64_t		elapsed;
 
+	if (sleeptime_ms < ttd)
+		usleep(sleeptime_ms * 800);
 	while (1)
 	{
 		elapsed = time_diff_ms(start_time_ms, timestamp_ms());

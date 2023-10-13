@@ -8,7 +8,11 @@ INC_DIR	:=  ./include
 
 #=================== LIBRARIES ===================#
 
-CFLAGS	:=	-Wextra -Wall -Werror -pthread -Ofast -flto -march=native
+CFLAGS	:=	-Wextra -Wall -Werror -pthread
+
+ifdef OPTIM
+	CFLAGS += -Ofast -flto -march=native
+endif
 
 ifdef DEBUG
 	CFLAGS += -g -Og

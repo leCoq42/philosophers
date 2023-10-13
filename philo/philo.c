@@ -13,7 +13,7 @@
 #include "philo.h"
 
 static void	*philo_func(void *arg);
-static void	set_done(t_philo *philo);
+static void	set_full(t_philo *philo);
 
 int	create_threads(t_main *main)
 {
@@ -51,9 +51,8 @@ static void	*philo_func(void *arg)
 	forks[LEFT] = philo->id % philo->main->config.num_philos;
 	pthread_mutex_lock(&philo->main->start_lock);
 	pthread_mutex_unlock(&philo->main->start_lock);
-	if (routine_loop(philo, forks, philo->main->config.num_times_to_eat, \
-				uneven) == 0)
-		set_done(philo);
+	routine_loop(philo, forks, philo->main->config.num_times_to_eat, \
+				uneven);
 	return (NULL);
 }
 
@@ -76,41 +75,27 @@ int	routine_loop(t_philo *philo, uint8_t *forks, uint32_t goal, \
 		if (eating(philo, forks) == 1)
 			return (1);
 		if (++i >= goal && goal != 0)
-			return (0);
+			set_full(philo);
 		if (sleeping(philo) == 1)
 			return (1);
-		if (i == UINT32_MAX)
+		if (i == UINT_FAST32_MAX)
 			i = 0;
 	}
 }
 
-static void	set_done(t_philo *philo)
+static void	set_full(t_philo *philo)
 {
-	const uint8_t	num_philos = philo->main->config.num_philos;
-
-	pthread_mutex_lock(&philo->main->stop_lock);
-	if (++philo->main->philos_done >= num_philos)
+	pthread_mutex_lock(&philo->philo_lock);
+	if (philo->state == ALIVE)
 	{
-		philo->main->stop = 1;
+		philo->state = FULL;
+		pthread_mutex_unlock(&philo->philo_lock);
+		pthread_mutex_lock(&philo->main->stop_lock);
+		philo->main->philos_done++;
 		pthread_mutex_unlock(&philo->main->stop_lock);
-		set_finish(philo->main);
-		usleep(4000);
-		pthread_mutex_lock(&philo->main->print_lock);
-		printf(FORMAT, time_diff_ms(philo->main->start_time, timestamp_ms()), \
-				philo->id, SLEEP);
-		pthread_mutex_unlock(&philo->main->print_lock);
 	}
 	else
-	{
-		pthread_mutex_unlock(&philo->main->stop_lock);
-		pthread_mutex_lock(&philo->philo_lock);
-		philo->state = DONE;
 		pthread_mutex_unlock(&philo->philo_lock);
-		pthread_mutex_lock(&philo->main->print_lock);
-		printf(FORMAT, time_diff_ms(philo->main->start_time, timestamp_ms()), \
-				philo->id, SLEEP);
-		pthread_mutex_unlock(&philo->main->print_lock);
-	}
 }
 
 int	check_print(t_philo *philo, char *action)
@@ -122,7 +107,7 @@ int	check_print(t_philo *philo, char *action)
 	pthread_mutex_lock(&philo->philo_lock);
 	state = philo->state;
 	pthread_mutex_unlock(&philo->philo_lock);
-	if (state == DONE)
+	if (state == STOP)
 	{
 		pthread_mutex_unlock(&philo->main->print_lock);
 		return (1);

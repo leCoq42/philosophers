@@ -42,8 +42,8 @@
 enum	e_philo_state
 {
 	ALIVE,
-	DEAD,
-	DONE
+	STOP,
+	FULL
 };
 
 typedef struct s_config
@@ -111,6 +111,7 @@ void			print_usage_error(void);
 // observer.c
 int				observer(t_main *main);
 void			set_finish(t_main *main);
+int				check_done(t_main *main);
 
 // actions.c
 int				grab_forks(t_philo *philo, uint8_t *forks);
