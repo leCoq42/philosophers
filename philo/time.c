@@ -5,13 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaan <mhaan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/12 10:43:00 by mhaan             #+#    #+#             */
-/*   Updated: 12/10/2023 03:07:03 PM mhaan            ###   ########.fr       */
+/*   Created: 2023/10/13 12:03:06 by mhaan             #+#    #+#             */
+/*   Updated: 2023/10/13 12:06:58 by mhaan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdint.h>
 
 uint_fast64_t	timestamp_ms(void)
 {

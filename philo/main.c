@@ -6,7 +6,7 @@
 /*   By: mhaan <mhaan@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 10:42:40 by mhaan             #+#    #+#             */
-/*   Updated: 2023/10/12 10:42:43 by mhaan            ###   ########.fr       */
+/*   Updated: 2023/10/13 12:05:13 by mhaan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ void	print_one_philo(t_main *main)
 {
 	printf("0 1 has taken a fork\n");
 	ph_sleep_ms(main->config.tt_die_ms, main);
-	printf("%u 1 died\n", main->config.tt_die_ms);
+	printf("%u 1 died\n", main->config.tt_die_ms + 1);
 }
