@@ -25,9 +25,12 @@ t_main	*init_structs(int argc, char **argv)
 		return (NULL);
 	memset(main, 0, sizeof(t_main));
 	main->philos_done = 0;
-	pthread_mutex_init(&main->print_lock, NULL);
-	pthread_mutex_init(&main->stop_lock, NULL);
-	pthread_mutex_init(&main->start_lock, NULL);
+	if (pthread_mutex_init(&main->print_lock, NULL) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&main->stop_lock, NULL) != 0)
+		return (NULL);
+	if (pthread_mutex_init(&main->start_lock, NULL) != 0)
+		return (NULL);
 	if (init_config(main, argc, argv) != 0)
 		return (free(main), NULL);
 	if (init_forks(main) != 0)
