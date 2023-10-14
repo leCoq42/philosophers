@@ -36,7 +36,7 @@ int	main(int argc, char **argv)
 	end_program(main);
 }
 
-void	print_one_philo(t_main *main)
+static void	print_one_philo(t_main *main)
 {
 	printf("0 1 has taken a fork\n");
 	ph_sleep_ms(main->config.tt_die_ms, main);
